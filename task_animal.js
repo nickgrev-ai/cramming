@@ -5,9 +5,13 @@ console.log('=== tasks_animal.js v1.6 ===');
 const ANIMAL_GROUPS = [
     [["медведя","bear.png"],["кабана","boar.png"],["лося","elk.png"],["лису","fox.png"],["белку","squirrel.png"],["зайца", "rabbit.png"],["волка", "wolf.png"]],
     [["верблюда", "camel.png"],["крокодила", "crocodile.png"],["тигра", "tigr.png"],["льва", "lion.png"],["бегемота", "hippo.png"],["носорога", "rhino.png"]],
-    [["слона", "elephant.png"],["жирафа", "giraffe.png"],["кенгуру", "kangaroo.png"],["обезьяну", "monkey.png"],["змею", "snake.png"],["зебру", "zebra.png"]]
+    [["слона", "elephant.png"],["жирафа", "giraffe.png"],["кенгуру", "kangaroo.png"],["обезьяну", "monkey.png"],["змею", "snake.png"],["зебру", "zebra.png"]],
+    [["кошку", "cat.png"],["собаку", "dog.png"],["корову", "cow.png"],["козу", "goat.png"],["свинью", "pig.png"],["зебру", "zebra.png"],["лошадь", "horse.png"]],
+    [["муху", "fly.png"],["гусеницу", "caterpillar.png"],["таракана", "cockroach.png"],["комара", "mosquito.png"],["паука", "spider.png"],["улитку", "snail.png"],["бабочку", "butterfly.png"],["стрекозу", "dragonfly.png"],["кузнечика", "dragonfly.png"]],
+    [["акулу", "shark.png"],["кита", ".png"],["дельфина", ".png"],["черепаху", ".png"],["осьминога", ".png"],["медузу", ".png"]],
+    [["попугая", ".png"],["орла", ".png"],["сову", ".png"],["петуха", ".png"],["голубя", ".png"],["павлина", ".png"]],
 ];
-
+//ежик
 // Путь к папке с картинками
 const IMAGES_PATH = 'p0/';
 

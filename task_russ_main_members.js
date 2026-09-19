@@ -1,5 +1,5 @@
 // task_russ_main_members.js
-console.log('=== task_russ_main_members.js v2.0 ===');
+console.log('=== task_russ_main_members.js v2.9 ===');
 
 const SENTENCES_BASE = [
     "Зайчик1грызет2капусту0","Пришла2поздняя0осень0","Я1ночевал2на0озере0",
@@ -54,61 +54,85 @@ function buildSentenceHtml(words, states) {
         if (state === 1) style = 'text-decoration: underline;';
         else if (state === 2) style = 'text-decoration: underline double;';
         html += '<span class="mm-sword" style="' + style + '">' + word.text + '</span>';
-        if (idx < words.length - 1) html += ' ';
+        if (idx < words.length - 1) {
+            html += ' ';
+        }
     });
-    return html.trim();
+    return html;
 }
 
-// === УЛУЧШЕННАЯ ФУНКЦИЯ ПОДБОРА ШРИФТА ===
 function fitText(element, startSize, minSize, step, unit) {
     let size = startSize;
     let attempts = 0;
     const maxAttempts = 500;
-    const tolerance = 3; // допуск в пикселях
-    
+    const tolerance = 3;
+
     element.style.fontSize = size + unit;
-    
-    // Проверяем, помещается ли контент
+
     const fits = () => {
-        const fitsWidth = element.scrollWidth <= element.clientWidth + tolerance;
-        const fitsHeight = element.scrollHeight <= element.clientHeight + tolerance;
-        return fitsWidth && fitsHeight;
+        return element.scrollWidth <= element.clientWidth + tolerance &&
+               element.scrollHeight <= element.clientHeight + tolerance;
     };
-    
+
     if (fits()) return size;
-    
+
     while (attempts < maxAttempts && size > minSize) {
         size -= step;
         element.style.fontSize = size + unit;
         attempts++;
         if (fits()) break;
     }
-    
+
     return size;
 }
 
-// === ПОДБОР ШРИФТА ДЛЯ НАБОРА СЛОВ ===
 function fitSentenceWords(container, wordElements, startSize, minSize, step, unit) {
     let size = startSize;
     let attempts = 0;
     const maxAttempts = 500;
     const tolerance = 3;
-    
+
     wordElements.forEach(w => { w.style.fontSize = size + unit; });
-    
+
     const fits = () => {
         return container.scrollHeight <= container.clientHeight + tolerance;
     };
-    
+
     if (fits()) return size;
-    
+
     while (attempts < maxAttempts && size > minSize) {
         size -= step;
         wordElements.forEach(w => { w.style.fontSize = size + unit; });
         attempts++;
         if (fits()) break;
     }
-    
+
+    return size;
+}
+
+function fitTextHeight(element, startSize, minSize, step, unit) {
+    let size = startSize;
+    let attempts = 0;
+    const maxAttempts = 1000;
+    const tolerance = 5;
+
+    element.style.fontSize = size + unit;
+    void element.offsetHeight;
+
+    const fits = () => {
+        void element.offsetHeight;
+        return element.scrollHeight <= element.clientHeight + tolerance;
+    };
+
+    if (fits()) return size;
+
+    while (attempts < maxAttempts && size > minSize) {
+        size -= step;
+        element.style.fontSize = size + unit;
+        attempts++;
+        if (fits()) break;
+    }
+
     return size;
 }
 
@@ -118,45 +142,44 @@ window.startTest = function (container, onExit, savedState) {
     const styleEl = document.createElement('style');
     styleEl.textContent = [
         '.mm-game-area { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; }',
-        
+
         '.mm-question-area { flex: 3; display: flex; align-items: center; justify-content: center; padding: 5px 10px; box-sizing: border-box; min-height: 0; overflow: hidden; }',
         '.mm-question-text { font-weight: bold; color: #333; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.1; max-width: 100%; }',
-        
+
         '.mm-sentence-area { flex: 7; display: flex; align-items: center; justify-content: center; padding: 10px; flex-wrap: wrap; align-content: center; box-sizing: border-box; min-height: 0; overflow: hidden; }',
         '.mm-word { font-weight: bold; color: #333; margin: 3px 6px; cursor: pointer; padding: 3px 6px; border-radius: 5px; transition: all 0.2s; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.2; }',
         '.mm-word:active { background: #e6e9ef; }',
         '.mm-word.subject { text-decoration: underline; }',
         '.mm-word.predicate { text-decoration: underline double; }',
-        
+
         '.mm-hint-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 5px 10px; box-sizing: border-box; min-height: 0; overflow: hidden; }',
         '.mm-hint-text { color: #666; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.1; max-width: 100%; }',
-        
+
         '.mm-check-btn { flex: 2; background: #4a90e2; color: #fff; border: none; font-weight: bold; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }',
         '.mm-check-btn:active { background: #3a7bc8; }',
-        
+
         '.mm-correct-screen { display: flex; flex-direction: column; width: 100%; height: 100%; background: #2ecc71; overflow: hidden; }',
-        '.mm-correct-content { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; word-wrap: break-word; overflow-wrap: break-word; color: white; font-weight: bold; line-height: 1.3; min-height: 0; overflow: hidden; }',
-        '.mm-correct-content .mm-sword { color: white; margin-right: 8px; }',
-        
+        '.mm-correct-content { flex: 1; display: block; padding: 20px; text-align: center; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; color: white; font-weight: bold; line-height: 1.3; min-height: 0; overflow: hidden; }',
+        '.mm-correct-content .mm-sword { color: white; }',
+
         '.mm-wrong-screen { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; }',
-        '.mm-wrong-top { flex: 5; display: flex; align-items: center; justify-content: center; padding: 15px; background: #e74c3c; color: white; font-weight: bold; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3; box-sizing: border-box; min-height: 0; overflow: hidden; }',
-        '.mm-wrong-top .mm-sword { color: white; margin-right: 8px; }',
-        '.mm-wrong-bottom { flex: 6; display: flex; align-items: center; justify-content: center; padding: 15px; background: #2ecc71; color: white; font-weight: bold; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3; box-sizing: border-box; min-height: 0; overflow: hidden; }',
-        '.mm-wrong-bottom .mm-sword { color: white; margin-right: 8px; }',
+        '.mm-wrong-top { flex: 5; display: block; padding: 15px; background: #e74c3c; color: white; font-weight: bold; text-align: center; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.3; box-sizing: border-box; min-height: 0; overflow: hidden; }',
+        '.mm-wrong-top .mm-sword { color: white; }',
+        '.mm-wrong-bottom { flex: 6; display: block; padding: 15px; background: #2ecc71; color: white; font-weight: bold; text-align: center; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.3; box-sizing: border-box; min-height: 0; overflow: hidden; }',
+        '.mm-wrong-bottom .mm-sword { color: white; }',
         '.mm-next-btn { flex: 2; background: #4a90e2; color: #fff; border: none; font-weight: bold; cursor: pointer; width: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }',
         '.mm-next-btn:active { background: #3a7bc8; }',
-        
-        '.mm-results { display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; }',
-        '.mm-results-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(5, 1fr); width: 100%; height: 100%; gap: 4px; padding: 4px; box-sizing: border-box; }',
-        '.mm-result-cell { position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; padding: 10px; }',
-        '.mm-result-cell.correct { background: #2ecc71; }',
-        '.mm-result-cell.wrong { background: #e74c3c; }',
-        '.mm-result-cell.skip { background: #95a5a6; }',
-        '.mm-result-sentence { color: white; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.3; max-width: 100%; }',
-        '.mm-result-badge { position: absolute; top: 5px; right: 5px; width: calc(100vh / 13 * 0.8); height: calc(100vh / 13 * 0.8); background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }',
-        '.mm-result-badge.correct { color: #27ae60; }',
-        '.mm-result-badge.wrong { color: #c0392b; }',
-        '.mm-result-badge.skip { color: #7f8c8d; }'
+
+        // === ЭКРАН РЕЗУЛЬТАТОВ: одна колонка с прокруткой, без бейджей ===
+        '.mm-results { display: flex; flex-direction: column; width: 100%; height: 100%; overflow-y: auto; }',
+        '.mm-results-grid { display: flex; flex-direction: column; width: 100%; gap: 2px; padding: 4px; box-sizing: border-box; }',
+        '.mm-result-cell { position: relative; display: block; padding: 8px 10px; box-sizing: border-box; word-wrap: break-word; overflow-wrap: break-word; white-space: normal; line-height: 1.3; }',
+        '.mm-result-cell.correct { background: #2ecc71; color: white; }',
+        '.mm-result-cell.wrong-user { background: #e74c3c; color: white; }',
+        '.mm-result-cell.wrong-correct { background: #2ecc71; color: white; }',
+        '.mm-result-cell.skip { background: #95a5a6; color: white; }',
+        '.mm-result-sentence { display: block; text-align: center; }',
+        '.mm-result-sentence .mm-sword { color: white; }'
     ].join('\n');
     document.head.appendChild(styleEl);
 
@@ -242,7 +265,6 @@ window.startTest = function (container, onExit, savedState) {
             if (sentenceArea) {
                 const wordEls = sentenceArea.querySelectorAll('.mm-word');
                 if (wordEls.length > 0) {
-                    // Начинаем с меньшего шрифта — 6vh вместо 12vh
                     fitSentenceWords(sentenceArea, wordEls, 6, 1.5, 0.2, 'vh');
                 }
             }
@@ -280,7 +302,7 @@ window.startTest = function (container, onExit, savedState) {
         });
 
         if (typeof saveState === 'function') saveState();
-        
+
         if (allCorrect) showCorrectScreen(q);
         else showWrongScreen(q);
     }
@@ -288,17 +310,17 @@ window.startTest = function (container, onExit, savedState) {
     function showCorrectScreen(q) {
         const correctStates = q.words.map(w => w.role);
         const sentenceHtml = buildSentenceHtml(q.words, correctStates);
-        
-        container.innerHTML = 
+
+        container.innerHTML =
             '<div class="mm-correct-screen">' +
                 '<div class="mm-correct-content" id="mm-correct-content">' + sentenceHtml + '</div>' +
             '</div>';
-        
+
         setTimeout(() => {
             const content = document.getElementById('mm-correct-content');
-            if (content) fitText(content, 12, 2, 0.2, 'vh');
-        }, 100);
-        
+            if (content) fitTextHeight(content, 6, 2, 0.15, 'vh');
+        }, 150);
+
         timeoutId = setTimeout(() => {
             currentIdx++;
             if (typeof saveState === 'function') saveState();
@@ -310,23 +332,23 @@ window.startTest = function (container, onExit, savedState) {
         const wrongHtml = buildSentenceHtml(q.words, wordStates);
         const correctStates = q.words.map(w => w.role);
         const correctHtml = buildSentenceHtml(q.words, correctStates);
-        
-        container.innerHTML = 
+
+        container.innerHTML =
             '<div class="mm-wrong-screen">' +
                 '<div class="mm-wrong-top" id="mm-wrong-top">' + wrongHtml + '</div>' +
                 '<div class="mm-wrong-bottom" id="mm-wrong-bottom">' + correctHtml + '</div>' +
                 '<button class="mm-next-btn" id="mm-next-btn">Дальше</button>' +
             '</div>';
-        
+
         setTimeout(() => {
             const top = document.getElementById('mm-wrong-top');
             const bottom = document.getElementById('mm-wrong-bottom');
             const btn = document.getElementById('mm-next-btn');
-            if (top) fitText(top, 10, 1.5, 0.2, 'vh');
-            if (bottom) fitText(bottom, 10, 1.5, 0.2, 'vh');
+            if (top) fitTextHeight(top, 6, 1.5, 0.15, 'vh');
+            if (bottom) fitTextHeight(bottom, 6, 1.5, 0.15, 'vh');
             if (btn) fitText(btn, 12, 2, 0.3, 'vh');
-        }, 100);
-        
+        }, 150);
+
         document.getElementById('mm-next-btn').onclick = function () {
             currentIdx++;
             if (typeof saveState === 'function') saveState();
@@ -349,49 +371,49 @@ window.startTest = function (container, onExit, savedState) {
         }
 
         let html = '<div class="mm-results"><div class="mm-results-grid">';
-        
+
         results.forEach(r => {
-            let cellClass = 'mm-result-cell';
-            let badgeClass = '';
-            let badgeSymbol = '';
-            
             if (r.skipped) {
-                cellClass += ' skip'; badgeClass = ' skip'; badgeSymbol = '—';
+                // Пропущено — серый фон, правильный ответ
+                const sentenceHtml = buildSentenceHtml(r.words, r.words.map(w => w.role));
+                html += '<div class="mm-result-cell skip">';
+                html += '<div class="mm-result-sentence">' + sentenceHtml + '</div>';
+                html += '</div>';
             } else if (r.isCorrect) {
-                cellClass += ' correct'; badgeClass = ' correct'; badgeSymbol = '✓';
+                // Правильно — зелёный фон, одно предложение
+                const sentenceHtml = buildSentenceHtml(r.words, r.words.map(w => w.role));
+                html += '<div class="mm-result-cell correct">';
+                html += '<div class="mm-result-sentence">' + sentenceHtml + '</div>';
+                html += '</div>';
             } else {
-                cellClass += ' wrong'; badgeClass = ' wrong'; badgeSymbol = '✗';
+                // Неправильно — два блока: красный (ответ пользователя) и зелёный (правильный)
+                const userHtml = buildSentenceHtml(r.words, r.userStates);
+                const correctHtml = buildSentenceHtml(r.words, r.words.map(w => w.role));
+                html += '<div class="mm-result-cell wrong-user">';
+                html += '<div class="mm-result-sentence">' + userHtml + '</div>';
+                html += '</div>';
+                html += '<div class="mm-result-cell wrong-correct">';
+                html += '<div class="mm-result-sentence">' + correctHtml + '</div>';
+                html += '</div>';
             }
-            
-            let sentenceHtml = '';
-            r.words.forEach((word) => {
-                let wordText = word.text;
-                if (word.role === 1) sentenceHtml += '<span style="text-decoration: underline;">' + wordText + '</span> ';
-                else if (word.role === 2) sentenceHtml += '<span style="text-decoration: underline double;">' + wordText + '</span> ';
-                else sentenceHtml += wordText + ' ';
-            });
-            
-            html += '<div class="' + cellClass + '">';
-            html += '<div class="mm-result-sentence">' + sentenceHtml.trim() + '</div>';
-            html += '<div class="mm-result-badge' + badgeClass + '">' + badgeSymbol + '</div>';
-            html += '</div>';
         });
-        
+
         html += '</div></div>';
         container.innerHTML = html;
 
+        // Подбор шрифта для всех ячеек
         setTimeout(() => {
             const cells = document.querySelectorAll('.mm-result-cell');
             cells.forEach(cell => {
                 const sentenceEl = cell.querySelector('.mm-result-sentence');
                 if (sentenceEl) {
-                    let size = 4;
-                    const minSize = 0.8;
+                    let size = 3;
+                    const minSize = 1;
                     const step = 0.1;
                     let attempts = 0;
                     while (attempts < 200 && size > minSize) {
                         sentenceEl.style.fontSize = size + 'vh';
-                        if (sentenceEl.scrollHeight <= cell.clientHeight - 10 && sentenceEl.scrollWidth <= cell.clientWidth - 10) break;
+                        if (sentenceEl.scrollHeight <= cell.clientHeight - 5 && sentenceEl.scrollWidth <= cell.clientWidth - 5) break;
                         size -= step;
                         attempts++;
                     }
