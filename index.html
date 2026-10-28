@@ -1,323 +1,1024 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Зубрёжка</title>
-    <style>
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f0f2f5; color: #333; height: 100vh; overflow: hidden; }
-
-/* === АЛЬБОМНАЯ ОРИЕНТАЦИЯ: квадрат по центру === */
-body.landscape { background: #000; }
-body.landscape #main-wrapper { 
-    width: 100vh; /* Ширина равна высоте экрана = идеальный квадрат */
-    max-width: 100vw; /* Защита от горизонтального скролла на мобильных */
-    margin: 0 auto; 
-    background: #f0f2f5; 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-}
-
-#main-wrapper { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-header { height: calc(100vh / 13); min-height: calc(100vh / 13); max-height: calc(100vh / 13); background-color: #4a90e2; color: white; display: flex; align-items: stretch; flex-shrink: 0; }
-#back-btn { width: calc(100vh / 13); min-width: calc(100vh / 13); max-width: calc(100vh / 13); height: 100%; background: rgba(255,255,255,0.2); border: none; border-right: 1px solid rgba(255,255,255,0.3); color: white; font-size: calc(100vh / 13 * 0.5); cursor: pointer; display: none; align-items: center; justify-content: center; flex-shrink: 0; }
-#back-btn:active { background: rgba(255,255,255,0.4); }
-#header-title-container { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0 10px; }
-#header-title { font-weight: bold; text-align: center; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.2; max-width: 100%; font-size: calc(100vh / 13 * 0.5); }
-#app { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-.menu-list { display: flex; flex-direction: column; flex: 1; }
-.menu-item { height: calc(100vh / 13); min-height: calc(100vh / 13); max-height: calc(100vh / 13); background: white; border: none; border-bottom: 1px solid #e0e0e0; font-size: calc(100vh / 13 * 0.5); text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 4px 15px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.2; font-weight: 500; }
-.menu-item:active { background: #e6e9ef; }
-.menu-item:last-child { border-bottom: none; }
-.empty-msg { text-align: center; color: #888; font-size: calc(100vh / 13 * 0.5); display: flex; align-items: center; justify-content: center; flex: 1; padding: 20px; word-wrap: break-word; overflow-wrap: break-word; line-height: 1.2; }
-#task-container { display: none; flex: 1; overflow: hidden; }
-.game-area { width: 100%; height: 100%; overflow: hidden; display: flex; flex-direction: column; }
-    </style>
+<meta charset="UTF-8">
+<title>Зубрёжка</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg-body);font-family:Arial,sans-serif;overflow:hidden;}
+#pole{position:absolute;background:var(--bg-pole);box-shadow:0 0 20px rgba(0,0,0,0.4);overflow-y:auto;}
+.task-el{position:absolute;overflow:hidden;}
+.vopros{padding:2px 4px;line-height:1.2;color:var(--text);display:block;align-items:center;justify-content:center;text-align:center;white-space:normal;word-wrap:break-word;}
+.vopros span{white-space:nowrap;display:inline-block;margin-right:0.15em;}
+.koment{padding:2px 4px;line-height:1.2;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;word-wrap:break-word;font-style:italic;}
+.koment span{white-space:nowrap;}
+.title{padding:2px 4px;line-height:1.2;color:var(--title-text);background:var(--accent);font-weight:normal;display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;word-wrap:break-word;flex-wrap:wrap;}
+.vvod{padding:4px 8px;line-height:1.2;color:var(--text);background:var(--menu-bg);border:2px solid var(--menu-border);border-radius:4px;display:block;text-align:center;white-space:normal;word-wrap:break-word;word-spacing:0.15em;}
+.vvod span{white-space:nowrap;display:inline-block;margin-right:0.15em;}
+.vvod span:last-child{margin-right:0;}
+.otvet{padding:2px 4px;line-height:1.2;color:var(--text);display:flex;align-items:center;justify-content:center;text-align:center;white-space:normal;word-wrap:break-word;}
+.menu{background:var(--menu-bg);color:var(--menu-text);border:none;border-bottom:2px solid var(--menu-border);cursor:pointer;font-weight:normal;transition:background 0.2s,color 0.2s;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;white-space:normal;word-wrap:break-word;}
+.menu:hover{background:var(--accent);color:var(--title-text);}
+.menu:active{background:var(--accent-hover);color:var(--title-text);}
+.knopki{background:var(--bg-pole);color:var(--text);border:2px solid var(--accent);border-radius:0;cursor:pointer;font-weight:normal;transition:background 0.2s,color 0.2s,border-color 0.2s;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;white-space:normal;word-wrap:break-word;}
+.knopki:hover{background:var(--accent);color:var(--title-text);}
+.knopki-correct{background:var(--correct) !important;color:var(--title-text) !important;border-color:var(--correct) !important;}
+.knopki-wrong{background:var(--wrong) !important;color:var(--title-text) !important;border-color:var(--wrong) !important;}
+.task-i{object-fit:contain;display:block;}
+.task-tb{border-collapse:collapse;width:100%;height:100%;}
+.task-tb th,.task-tb td{border:1px solid var(--text);padding:4px 8px;text-align:left;}
+.task-tb th{background:var(--menu-bg);}
+.task-hidden{display:none;}
+.task-clickable{cursor:pointer;transition:opacity 0.2s,transform 0.1s;}
+.task-clickable:hover{opacity:0.8;}
+.task-clickable:active{opacity:0.6;transform:scale(0.95);}
+.task-i-clickable{cursor:pointer;transition:opacity 0.2s,outline 0.2s,filter 0.2s;outline:4px solid transparent;}
+.task-i-clickable:hover{opacity:0.95;outline:6px solid var(--accent);filter:brightness(1.15) drop-shadow(0 0 12px var(--accent));}
+.task-i-clickable:active{opacity:0.85;outline:6px solid var(--accent-hover);filter:brightness(0.9) drop-shadow(0 0 15px var(--accent-hover));}
+@keyframes overlayPop{from{transform:scale(0.3);opacity:0;}to{transform:scale(1);opacity:1;}}
+body.theme-blue{--bg-body:#2c3e50;--bg-pole:#ffffff;--text:#1a3a5c;--accent:#2980b9;--accent-hover:#3498db;--title-text:#ffffff;--menu-bg:#ecf0f1;--menu-text:#2c3e50;--menu-border:#bdc3c7;--hint:#7f8c8d;--correct:#27ae60;--wrong:#e74c3c;}
+body.theme-blue-inv{--bg-body:#ffffff;--bg-pole:#2c3e50;--text:#ecf0f1;--accent:#3498db;--accent-hover:#2980b9;--title-text:#2c3e50;--menu-bg:#1a252f;--menu-text:#ecf0f1;--menu-border:#34495e;--hint:#95a5a6;--correct:#2ecc71;--wrong:#e74c3c;}
+body.theme-brown{--bg-body:#3e2723;--bg-pole:#fff8e1;--text:#3e2723;--accent:#8d6e63;--accent-hover:#a1887f;--title-text:#fff8e1;--menu-bg:#ffe0b2;--menu-text:#3e2723;--menu-border:#bcaaa4;--hint:#795548;--correct:#558b2f;--wrong:#c62828;}
+body.theme-brown-inv{--bg-body:#fff8e1;--bg-pole:#3e2723;--text:#ffe0b2;--accent:#a1887f;--accent-hover:#8d6e63;--title-text:#3e2723;--menu-bg:#2c1a17;--menu-text:#ffe0b2;--menu-border:#5d4037;--hint:#8d6e63;--correct:#7cb342;--wrong:#ef5350;}
+body.theme-lavender{--bg-body:#4a3b5c;--bg-pole:#f5f0ff;--text:#2d1b4e;--accent:#9b7ebd;--accent-hover:#b399d6;--title-text:#ffffff;--menu-bg:#e8dff5;--menu-text:#4a3b5c;--menu-border:#c4b5d9;--hint:#7a6891;--correct:#6ab04c;--wrong:#eb4d4b;}
+body.theme-lavender-inv{--bg-body:#f5f0ff;--bg-pole:#4a3b5c;--text:#e8dff5;--accent:#b399d6;--accent-hover:#9b7ebd;--title-text:#4a3b5c;--menu-bg:#3a2d4a;--menu-text:#e8dff5;--menu-border:#6b5b7d;--hint:#9b7ebd;--correct:#8bc34a;--wrong:#ff5252;}
+body.theme-gray{--bg-body:#424242;--bg-pole:#fafafa;--text:#212121;--accent:#757575;--accent-hover:#9e9e9e;--title-text:#ffffff;--menu-bg:#eeeeee;--menu-text:#424242;--menu-border:#bdbdbd;--hint:#9e9e9e;--correct:#4caf50;--wrong:#f44336;}
+body.theme-gray-inv{--bg-body:#fafafa;--bg-pole:#424242;--text:#eeeeee;--accent:#9e9e9e;--accent-hover:#757575;--title-text:#424242;--menu-bg:#303030;--menu-text:#eeeeee;--menu-border:#616161;--hint:#bdbdbd;--correct:#66bb6a;--wrong:#ef5350;}</style>
 </head>
 <body>
-<div id="main-wrapper">
-    <header>
-        <button id="back-btn" onclick="goBack()">←</button>
-        <div id="header-title-container">
-            <span id="header-title">Выберите класс</span>
-        </div>
-    </header>
-    <div id="app"></div>
-    <div id="task-container">
-        <div class="game-area" id="game-area"></div>
-    </div>
-</div>
-<script src="curriculum.js"></script>
+
+<div id="pole"></div>
+
 <script>
-    let state = { screen: 'classes' };
-    let navStack = [];
-    let currentScript = null;
+const menu=[
+["0 класс",["Животные","animal"],["Загадки","riddles"],["Сложение","add"]],
+["1 класс",
+ ["Математика",["Сложение","add2"],["Вычитание","sub"]],
+ ["Русский язык",["Безударные гласные в корне","vybor_prov_bgvk"],["Главные члены предложения","chlen_predl1"]],
+ ["Английский язык",["Слова","eng_word1"]]],
+["2 класс",
+ ["Математика",["Умножение легко","mult"]],
+ ["Русский язык",["Безударные гласные в корне","vybor_prov_bgvk"],["Фразеологизмы","phraseology"]],
+ ["Английский язык",["Предложения","eng_gram1"]]],
+["3 класс",
+ ["Математика",["Умножение легко","mult"],["Умножение сложно","mult2"],["Уравнения","uravn1"]],
+ ["Русский язык",["Запятые","commas1"]]],
+["4 класс",["Математика",["Умножение сложно","mult2"]]],
+["5 класс"],
+["6 класс"],
+["7 класс"],
+["8 класс",["Биология",["Термины","vybor_bio_term"]]],
+["9 класс"],
+["10 класс"],
+["11 класс"]
+];
 
-    function saveState() {
-        const stateToSave = {
-            navStack: navStack,
-            state: state,
-            timestamp: Date.now()
-        };
-        if (state.screen === 'task' && typeof window.taskGetState === 'function') {
-            stateToSave.taskState = window.taskGetState();
-        }
-        try {
-            localStorage.setItem('zubrilka_state', JSON.stringify(stateToSave));
-        } catch (e) {
-            console.error('Ошибка сохранения:', e);
-        }
-    }
+let t="";
+let elements=[];
 
-    function restoreState() {
-        const saved = localStorage.getItem('zubrilka_state');
-        if (!saved) return null;
-        try {
-            const parsed = JSON.parse(saved);
-            if (Date.now() - parsed.timestamp > 24 * 60 * 60 * 1000) {
-                localStorage.removeItem('zubrilka_state');
-                return null;
-            }
-            return parsed;
-        } catch (e) {
-            console.error('Ошибка восстановления:', e);
-            localStorage.removeItem('zubrilka_state');
-            return null;
-        }
-    }
+function saveState(){console.log("save action="+action+" / param="+param);
+const sohr=[t_m,t_q,t_a,JSON.stringify(t_z),JSON.stringify(t_o),JSON.stringify(t_v),JSON.stringify(t_e),action,param,currentTheme];
+localStorage.setItem('zubrozhka_save',JSON.stringify(sohr));
+}
 
-    function clearSavedState() {
-        localStorage.removeItem('zubrilka_state');
-    }
+function loadState(){
+t_m=null;t_q=0;t_a="0";action=0;param=0;currentTheme='theme-blue';
+t_z=[];t_o=[0,0,0,0,0,0,0,0,0,0];t_v=[];t_e=[];
+const saved=localStorage.getItem('zubrozhka_save');
+if(saved){
+ const parsed=JSON.parse(saved);
+ t_m=parsed[0];t_q=parsed[1];t_a=parsed[2];
+ t_z=JSON.parse(parsed[3]);t_o=JSON.parse(parsed[4]);t_v=JSON.parse(parsed[5]);t_e=JSON.parse(parsed[6]);
+ action=parsed[7];param=parsed[8];currentTheme=parsed[9]
+}
+document.body.className=currentTheme;
+console.log("load");
+}
 
-    function navigateTo(screen, data = {}) {
-        navStack.push({...state});
-        state = { screen, ...data };
-        render();
-        saveState();
-    }
+function parseFrac(s){s=(s||'').trim();if(s.includes('/')){const[a,b]=s.split('/').map(parseFloat);return(b===0)?0:a/b;}return parseFloat(s)||0;}
 
-    function goBack() {
-        const wasInTask = (state.screen === 'task');
-        if (typeof window.taskCleanup === 'function') { window.taskCleanup(); window.taskCleanup = null; }
-        window.taskGetState = null;
-        window.taskIsInMenu = null;
-        window.taskShowResultsBeforeExit = null;
-        if (currentScript) { document.head.removeChild(currentScript); currentScript = null; }
-        const prev = navStack.pop();
-        if (prev) { state = prev; render(); }
-        else { state = { screen: 'classes' }; render(); }
+function createElement(type,param1,param2,extra){
+//console.log("ce type="+type+" param1="+param1+" param2="+param2+" extra="+extra)
+if(type==='т'){
+const div=document.createElement('div');
+div.className='task-el '+param2;
+div.style.fontWeight='normal';
+div.innerHTML=param1;
+if(extra&&extra.trim()){div.classList.add('task-clickable');div.onclick=(e)=>{e.stopPropagation();try{new Function(extra)();}catch(err){console.error(err);}};}
+return div;
+}
+if(type==='к'){
+const btn=document.createElement('button');
+if(extra==='menu')btn.className='task-el menu';
+else btn.className='task-el knopki';
+btn.style.fontWeight='normal';
+btn.innerHTML=param1;
+if(param2&&param2.trim()){btn.onclick=(e)=>{e.stopPropagation();try{new Function(param2)();}catch(err){console.error(err);}};}
+return btn;
+}
+if(type==='и'){
+const img=document.createElement('img');
+img.className='task-el task-i';
+img.src=param1;
+if(param2&&param2.trim()){
+img.classList.add('task-i-clickable');
+img.onclick=(e)=>{
+e.preventDefault();
+e.stopPropagation();
+try{new Function(param2)();}catch(err){console.error(err);}
+};
+}
+return img;
+}
+if(type==='м'){
+const table=document.createElement('table');
+table.className='task-el task-tb';
+param1.split('|').forEach((r,i)=>{
+const tr=document.createElement('tr');
+r.split(',').forEach(c=>{
+const td=document.createElement(i===0?'th':'td');
+td.textContent=c.trim();
+tr.appendChild(td);
+});
+table.appendChild(tr);
+});
+return table;
+}
+return document.createElement('div');
+}
 
-        if (wasInTask) {
-            const stateToSave = {
-                navStack: navStack,
-                state: state,
-                timestamp: Date.now()
-            };
-            try {
-                localStorage.setItem('zubrilka_state', JSON.stringify(stateToSave));
-            } catch (e) {
-                console.error('Ошибка сохранения:', e);
-            }
-        } else if (navStack.length === 0 && state.screen === 'classes') {
-            clearSavedState();
-        } else {
-            saveState();
-        }
-    }
+function fitText(el){
+const maxW=el.clientWidth,maxH=el.clientHeight;
+if(maxW<=0||maxH<=0)return;
+let lo=6,hi=Math.min(maxH*1.2,maxW*2);
+while(hi-lo>0.5){
+const mid=(lo+hi)/2;
+el.style.fontSize=mid+'px';
+if(el.scrollWidth<=maxW&&el.scrollHeight<=maxH)lo=mid;
+else hi=mid;
+}
+el.style.fontSize=lo+'px';
+}
 
-    function openSubjects(classIdx) { navigateTo('subjects', { classIdx }); }
-    function openTopics(classIdx, subjectIdx) { navigateTo('topics', { classIdx, subjectIdx }); }
-    function startExternalTask(file, initFunc, name) { navigateTo('task', { taskFile: file, initFunc, taskName: name }); }
+function fitAllTexts(){
+document.querySelectorAll('.vopros,.title,.vvod,.koment,.otvet,.menu').forEach(fitText);
+const answerBtns=document.querySelectorAll('.knopki');
+if(answerBtns.length>0){
+let minSize=Infinity;
+answerBtns.forEach(btn=>{
+const maxW=btn.clientWidth;
+const maxH=btn.clientHeight;
+if(maxW<=0||maxH<=0)return;
+let lo=6,hi=Math.min(maxH*1.2,maxW*2);
+while(hi-lo>0.5){
+const mid=(lo+hi)/2;
+btn.style.fontSize=mid+'px';
+if(btn.scrollWidth<=maxW&&btn.scrollHeight<=maxH)lo=mid;
+else hi=mid;
+}
+if(lo<minSize)minSize=lo;
+});
+answerBtns.forEach(btn=>{btn.style.fontSize=minSize+'px';});
+}
+}
 
-    function updateOrientation() {
-        if (window.innerWidth > window.innerHeight) document.body.classList.add('landscape');
-        else document.body.classList.remove('landscape');
-    }
+function applySizes(maxBottom){
+if(maxBottom===undefined){maxBottom=0;elements.forEach(it=>{maxBottom=Math.max(maxBottom,it.topF+it.heightF);});}
+const pole=document.getElementById('pole');
+const winW=window.innerWidth,winH=window.innerHeight;
+const targetW=Math.min(winW,winH),targetH=winH;
+pole.style.width=targetW+'px';
+pole.style.height=targetH+'px';
+pole.style.left=((winW-targetW)/2)+'px';
+pole.style.top='0px';
+elements.forEach(item=>{item.el.style.top=(item.topF*targetH)+'px';item.el.style.left=(item.leftF*targetW)+'px';item.el.style.height=(item.heightF*targetH)+'px';item.el.style.width=(item.widthF*targetW)+'px';});
+fitAllTexts();
+}
+function zadan(per1,per2){action=per1;param=per2;z="";
+console.log("zadan t_q="+t_q,"t_m="+t_m,"action="+action,"param="+param);
 
-    // === ПОДБОР ШРИФТА ДЛЯ МЕНЮ ===
-    function fitMenuText() {
-        setTimeout(() => {
-            const items = document.querySelectorAll('.menu-item');
-            if (items.length === 0) return;
-            
-            items.forEach(item => {
-                item.style.fontSize = '';
-                let fontSize = parseFloat(window.getComputedStyle(item).fontSize);
-                const maxHeight = item.clientHeight;
-                
-                let attempts = 0;
-                const maxAttempts = 100;
-                const minFontSize = 8;
-                
-                while (attempts < maxAttempts && fontSize > minFontSize) {
-                    const fitsWidth = item.scrollWidth <= item.clientWidth;
-                    const fitsHeight = item.scrollHeight <= maxHeight;
-                    
-                    if (fitsWidth && fitsHeight) {
-                        break;
-                    }
-                    
-                    fontSize -= 0.5;
-                    item.style.fontSize = fontSize + 'px';
-                    attempts++;
-                }
-            });
-        }, 10);
-    }
+if(t_m===null){z="menu0";
+t_m="";
+t="<<т~0~0~1/6~1~Зубрёжка~title~zadan(0)>><<т~1/6~0~4/6~1~Программа для заучивания школьных материалов для учеников с 0 по 11 класс~title~zadan(0)>><<т~5/6~0~1/6~1~Нажмите любую клавишу или коснитесь экрана~vopros~zadan(0)>>";
+}else if(action==-1){z="nastr";
+t=`<<к~0~0~1/13~1/6~←~t_m='';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Настройки~title>><<т~1/13~0~2/13~1~Выбери цветовую схему~title>>`;
+t+=`<<к~3/13~0~2/13~1~Синяя~document.body.className='theme-blue';currentTheme='theme-blue';zadan(-1)~knopki>>`;
+t+=`<<к~5/13~0~2/13~1~Коричневая~document.body.className='theme-brown';currentTheme='theme-brown';zadan(-1)~knopki>>`;
+t+=`<<к~7/13~0~2/13~1~Лавандовая~document.body.className='theme-lavender';currentTheme='theme-lavender';zadan(-1)~knopki>>`;
+t+=`<<к~9/13~0~2/13~1~Серая~document.body.className='theme-gray';currentTheme='theme-gray';zadan(-1)~knopki>>`;
+t+=`<<к~11/13~0~2/13~1~Инверсия~if(currentTheme.endsWith('-inv')){currentTheme=currentTheme.replace('-inv','');}else{currentTheme=currentTheme+'-inv';}document.body.className=currentTheme;zadan(-1)~knopki>>`;
+const pole=document.getElementById('pole');
+pole.innerHTML='';
+pole.scrollTop=0;
+elements=[];
+const regex=/<<(и|к|т|м)~([^>>]*)>>/g;
+let match,maxBottom=0;
+while((match=regex.exec(t))!==null){
+const p=match[2].split('~');
+const el=createElement(match[1],p[4]||'',p[5]||'',p[6]||'');
+elements.push({el,topF:parseFrac(p[0]),leftF:parseFrac(p[1]),heightF:parseFrac(p[2]),widthF:parseFrac(p[3])});
+pole.appendChild(el);
+maxBottom=Math.max(maxBottom,elements[elements.length-1].topF+elements[elements.length-1].heightF);
+}
+applySizes(maxBottom);
+saveState();return;
+}else if(t_m===''){z="menu1";
+t="<<т~0~0~1/13~5/6~Выбери класс~title>><<т~0~5/6~1/13~1/6~🛠️~title~zadan(-1)>>";
+for(let i=0;i<menu.length;i++){t+="<<к~"+(i+1)+"/13~0~1/13~1~"+menu[i][0]+"~t_m='"+i+"';zadan(0)~menu>>";}
+}else{
+let _t_m=t_m.split("|");_menu=menu;let _zagl=""
+for(let i=0;i<_t_m.length;i++){_zagl=_zagl+_menu[_t_m[i]][0]+" / ";_menu=_menu[_t_m[i]];}
+vt_m=(_t_m.length==1)?"":((_t_m.length==2)?_t_m[0]:_t_m[0]+"|"+_t_m[1]);
+if(typeof _menu[1]==='object'){z="menu2";
+t="<<к~0~0~1/13~1/6~←~t_m='"+vt_m+"';zadan(0)~menu>><<т~0~1/6~1/13~5/6~"+_zagl.slice(0,-3)+"~title>>";
+let ii=(_menu.length<5)?3:((_menu.length<7)?2:1);
+for(let i=1;i<_menu.length;i++){t+="<<к~"+(1+(i-1)*ii)+"/13~0~"+ii+"/13~1~"+_menu[i][0]+"~t_m='"+t_m+"|"+i+"';zadan(0)~menu>>"}
+}else{z=_menu[1];
+console.log("_menu[1]="+_menu[1]);
 
-    function render() {
-        const app = document.getElementById('app');
-        const taskContainer = document.getElementById('task-container');
-        const gameArea = document.getElementById('game-area');
-        const headerTitle = document.getElementById('header-title');
-        const backBtn = document.getElementById('back-btn');
+if(action===0){
+if(z=="animal"){
+mas_base=[
+[["медведя","bear.png"],["лису","fox.png"],["белку","squirrel.png"],["зайца","rabbit.png"],["волка","wolf.png"],["ёжика","hedgehog.png"]],
+[["слона","elephant.png"],["жирафа","giraffe.png"],["льва","lion.png"],["тигра","tigr.png"],["обезьяну","monkey.png"],["зебру","zebra.png"]],
+[["кошку","cat.png"],["собаку","dog.png"],["корову","cow.png"],["свинью","pig.png"],["лошадь","horse.png"],["козу","goat.png"]],
+[["попугая","parrot.png"],["орла","eagle.png"],["сову","owl.png"],["петуха","rooster.png"],["голубя","pigeon.png"],["павлина","peacock.png"]],
+[["акулу","shark.png"],["кита","whale.png"],["дельфина","dolphin.png"],["черепаху","turtle.png"],["осьминога","octopus.png"],["медузу","jellyfish.png"]],
+[["бабочку","butterfly.png"],["пчелу","bee.png"],["кузнечика","grasshopper.png"],["паука","spider.png"],["улитку","snail.png"],["муху","fly.png"]]
+];
+}else if(z=="eng_word1"){
+mas_base=[
+[["ноль","zero"],["один","one"],["два","two"],["три","three"],["четыре","four"],["пять","five"],["шесть","six"],["семь","seven"],["восемь","eight"],["девять","nine"]],
+[["десять","ten"],["одиннадцать","eleven"],["двенадцать","twelve"],["тринадцать","thirteen"],["четырнадцать","fourteen"],["пятнадцать","fifteen"],["шестнадцать","sixteen"],["семнадцать","seventeen"],["восемнадцать","eighteen"],["девятнадцать","nineteen"],["двадцать","twenty"]],
+[["мама","mother"],["папа","father"],["сын","son"],["дочь","daughter"],["ребёнок","child"],["сестра","sister"],["брат","brother"],["бабушка","grandma"],["дедушка","grandpa"]],
+[["книга","book"],["ручка","pen"],["карандаш","pencil"],["сумка","bag"],["парта","desk"],["линейка","ruler"],["школа","school"],["учитель","teacher"],["ученик","pupil"]],
+[["красный","red"],["синий","blue"],["зелёный","green"],["жёлтый","yellow"],["чёрный","black"],["белый","white"],["оранжевый","orange"],["розовый","pink"],["серый","grey"],["коричневый","brown"]],
+[["кошка","cat"],["собака","dog"],["рыба","fish"],["птица","bird"],["лошадь","horse"],["корова","cow"],["свинья","pig"],["овца","sheep"],["утка","duck"]],
+[["тигр","tiger"],["обезьяна","monkey"],["слон","elephant"],["медведь","bear"],["заяц","rabbit"],["лиса","fox"],["волк","wolf"],["ёж","hedgehog"],["белка","squirrel"]],
+[["яблоко","apple"],["банан","banana"],["торт","cake"],["хлеб","bread"],["яйцо","egg"],["суп","soup"],["сыр","cheese"],["мясо","meat"],["конфета","candy"]],
+[["молоко","milk"],["вода","water"],["чай","tea"],["сок","juice"],["кофе","coffee"],["мороженое","ice cream"]],
+[["бегать","run"],["прыгать","jump"],["плавать","swim"],["читать","read"],["писать","write"],["петь","sing"],["играть","play"],["рисовать","draw"],["спать","sleep"]],
+[["танцевать","dance"],["есть","eat"],["пить","drink"],["гулять","walk"],["смеяться","laugh"],["говорить","speak"]],
+[["голова","head"],["рука","hand"],["нога","leg"],["глаз","eye"],["нос","nose"],["рот","mouth"],["ухо","ear"],["ступня","foot"]],
+[["я","I"],["ты,вы","you"],["он","he"],["она","she"],["оно","it"],["мы","we"],["они","they"]]
+];
+}else if(z=="riddles"){
+mas_base=[
+["Сам алый, сахарный, кафтан зелёный, бархатный.","Арбуз","watermelon.png",["Арбуз","Яблоко","Помидор","Клубника","Вишня","Гранат"]],
+["По деревьям скок-скок, А орешки — щелк-щелк.","Белка","squirrel.png",["Белка","Хомяк","Мышь","Бурундук","Крыса","Енот"]],
+["Я оранжевый зверек, Шубка тёплая, как грелка, Хвостик мягкий, как пушок, Я — старательная…","Белка","squirrel.png",["Белка","Хомяк","Мышь","Бурундук","Крыса","Енот"]],
+["Без крыльев, а летает, без рук, а ворота открывает, без голоса, а завывает.","Ветер","wind.png",["Ветер","Ураган","Буря","Сквозняк","Шторм","Тайфун"]],
+["Без рук, без ног, а бежит.","Вода","water.png",["Вода","Ветер","Облако","Река","Дождь","Туман"]],
+["Серый, страшный и зубастый, произвёл переполох. Все зверята разбежались. Напугал зверят тот...","Волк","wolf.png",["Волк","Медведь","Лиса","Тигр","Рысь","Шакал"]],
+["Зеленый домик тесноват: В нем круглые братцы лежат. Откроешь створки — Шарики блестят.","Горох","peas.png",["Горох","Фасоль","Чечевица","Кукуруза","Бобы","Нут"]],
+["Лечит он слонов и крыс, Бегемотов, зайцев, лис. Перевяжет ранку На лапке обезьянки. И любой вам подтвердит… Это…","Доктор Айболит","aybolit.png",["Доктор Айболит","Ветеринар","Врач","Медбрат","Профессор","Знахарь"]],
+["Сердитый недотрога живёт в глуши лесной, Иголок очень много, а нитки — ни одной.","Ёж","hedgehog.png",["Ёж","Енот","Барсук","Мышь","Крот","Белка"]],
+["Под деревьями лежит И тихонечко сопит. Нам его нельзя погладить, Ведь иголки могут ранить.","Ёж","hedgehog.png",["Ёж","Енот","Барсук","Мышь","Крот","Белка"]],
+["Зимой и летом одним цветом.","Ёлка","christmastree.png",["Ёлка","Берёза","Дуб","Клён","Сосна","Рябина"]],
+["Не лает, не кусает, а в дом не пускает.","Замок","lock.png",["Замок","Дверь","Собака","Кот","Окно","Забор"]],
+["Маленький, беленький, по лесочку прыг-прыг, по снежочку тык-тык.","Заяц","rabbit.png",["Заяц","Белка","Мышка","Ёжик","Кролик","Хомяк"]],
+["Темное одеяло. Все дырявым стало. Дырки светятся в ночи. Угадай-ка, изловчись!","Звездное небо","starry_sky.png",["Звездное небо","Ночь","Космос","Млечный Путь","Созвездие","Небосвод"]],
+["Всех на свете обшивает, а сама не одета.","Иголка","needle.png",["Иголка","Нитка","Ножницы","Булавка","Напёрсток","Клубок"]],
+["Сто одёжек и все без застёжек.","Капуста","cabbage.png",["Капуста","Лук","Салат","Кочан","Пекинская капуста","Брокколи"]],
+["Не дерево, а с листочками. Не рубашка, а сшита.","Книга","book.png",["Книга","Тетрадь","Журнал","Альбом","Газета","Блокнот"]],
+["Мордочка усатая, шубка полосатая, часто умывается, а с водой не знается.","Кошка","cat.png",["Кошка","Тигр","Енот","Барсук","Хомяк","Котёнок"]],
+["Сама пёстрая, ест зелёное, даёт белое.","Корова","cow.png",["Корова","Лошадь","Коза","Овца","Свинья","Ослик"]],
+["Ах, не трогайте меня! Обожгу и без огня.","Крапива","nettle.png",["Крапива","Кактус","Роза","Шиповник","Репейник","Бодяк"]],
+["Висит груша — нельзя скушать.","Лампочка","lightbulb.png",["Лампочка","Яблоко","Груша","Светильник","Фонарь","Луковица"]],
+["Хвост пушистый, мех золотистый, в лесу живёт, в деревне кур крадёт.","Лиса","fox.png",["Лиса","Волк","Куница","Белка","Собака","Кот"]],
+["Днем спит, А ночью глядит. Круглолица, белолица, Смотрит в зеркальце-водицу.","Луна","moon.png",["Луна","Солнце","Звезда","Планета","Комета","Туча"]],
+["Ква-ква-ква — какая песня! Лучше нет для нас веселья!","Лягушка","frog.png",["Лягушка","Жаба","Тритон","Саламандра","Улитка","Рыбка"]],
+["Сидит дед, во сто шуб одет. Кто его раздевает, тот слёзы проливает.","Лук","onion.png",["Лук","Морковь","Картошка","Капуста","Чеснок","Редиска"]],
+["Бусы красные висят. Из кустов на нас глядят. Очень любят бусы эти дети, птицы и медведи.","Малина","raspberry.png",["Малина","Клубника","Смородина","Вишня","Земляника","Ежевика"]],
+["Рядом разные подружки, но похожи друг на дружку. Все они сидят друг в дружке, а всего одна игрушка.","Матрёшка","matryoshka.png",["Матрёшка","Кукла","Игрушка","Пирамидка","Конструктор","Мяч"]],
+["Кто в лесу глухом живёт, неуклюжий, косолапый? Летом ест малину, мёд, а зимой сосёт он лапу.","Медведь","bear.png",["Медведь","Волк","Кабан","Лось","Олень","Барсук"]],
+["Белый камешек растаял, на доске следы оставил.","Мел","chalk.png",["Мел","Карандаш","Ластик","Краска","Уголь","Пастель"]],
+["Красна девица сидит в темнице, а коса на улице.","Морковь","carrot.png",["Морковь","Свёкла","Редиска","Репа","Тыква","Кабачок"]],
+["Без рук рисует, без зубов кусает.","Мороз","frost.png",["Мороз","Холод","Зима","Снег","Лёд","Ветер"]],
+["Ты сидишь в самолёте, впереди тебя лошадь, сзади — автомобиль. Где ты находишься?","На карусели","carousel.png",["На карусели","В цирке","В парке","На выставке","В зоопарке","В кино"]],
+["Наклонишь — не упаду, положишь — снова встать смогу.","Неваляшка","nevalyashka.png",["Неваляшка","Кукла","Игрушка","Маятник","Ванька-встанька","Фигурка"]],
+["Два кольца, два конца, посередине гвоздик.","Ножницы","scissors.png",["Ножницы","Очки","Вилка","Ключ","Петля","Цепь"]],
+["Рос шар бел, ветер дунул – шар улетел","Одуванчик","dandelion.png",["Одуванчик","Ромашка","Одуван","Пушица","Хлопок","Василёк"]],
+["Без окон, без дверей, полна горница людей.","Огурец","cucumber.png",["Огурец","Кабачок","Помидор","Перец","Баклажан","Тыква"]],
+["Стройный, быстрый, Рога ветвисты. Скачет по лесу весь день Очень красивый…","Олень","deer.png",["Олень","Лось","Косуля","Кабан","Заяц","Волк"]],
+["На заборе по утрам кукарекал...","Петух","rooster.png",["Петух","Курица","Гусь","Утка","Индюк","Цыплёнок"]],
+["Посадили зёрнышко — вырастили солнышко.","Подсолнух","sunflower.png",["Подсолнух","Ромашка","Одуванчик","Тюльпан","Роза","Мак"]],
+["Жу-жу-жу, я на ветке сижу, Мёд вам в соты принесу.","Пчела","bee.png",["Пчела","Оса","Шмель","Муха","Бабочка","Стрекоза"]],
+["На небе после дождя мост цветной появляется, семь цветов в нём переливаются.","Радуга","rainbow.png",["Радуга","Солнце","Облако","Гроза","Молния","Туча"]],
+["Над землей — трава, Под землей — алая голова.","Свекла","beet.png",["Свекла","Морковь","Редиска","Репа","Картошка","Лук"]],
+["Белые мухи на поле сели","Снег","snow.png",["Снег","Град","Иней","Лёд","Дождь","Туман"]],
+["Белый, пушистый, искристый, Всю землю покроет зимой.","Снег","snow.png",["Снег","Град","Иней","Лёд","Дождь","Туман"]],
+["Зимой из снега слеплен ловко: три колобка и нос морковка","Снеговик","snowman.png",["Снеговик","Снежная баба","Дед Мороз","Сугроб","Ледяная фигура","Снежный ком"]],
+["Если плачу, то худею, Меньше ростом становлюсь, Оглянуться не успею — Упаду и расколюсь.","Сосулька","icicle.png",["Сосулька","Снежинка","Льдинка","Градина","Капля","Снеговик"]],
+["Что можно увидеть с закрытыми глазами?","Сон","dream.png",["Сон","Темнота","Сновидение","Ночь","Мечта","Покой"]],
+["Четыре ножки есть, спинка тоже есть, а ходить не может.","Стул","chair.png",["Стул","Стол","Диван","Кровать","Табуретка","Шкаф"]],
+["Четыре копытца, пятачок и хвост-крючок.","Свинья","pig.png",["Свинья","Корова","Коза","Овца","Лошадь","Осёл"]],
+["Плывут по небу корабли, Их ветер гонит вкруг земли. И странный груз везут с собой: То снег, то дождик проливной.","Тучи","clouds.png",["Тучи","Облака","Самолёты","Птицы","Корабли","Дирижабли"]],
+["Круглое, румяное, растёт на ветке.","Яблоко","apple.png",["Яблоко","Апельсин","Персик","Слива","Груша","Айва"]],
+["Чем больше из неё берёшь, тем она становится больше.","Яма","hole.png",["Яма","Пещера","Ров","Колодец","Озеро","Ящик"]]
+];
+}else if(z=="vybor_prov_bgvk"){
+mas_base=[
+"гр[о~а~грОзы]за","гр[а~о~грач]чи","н[о~а~нОс]сы","тр[а~о~трАвы]ва","р[е~и~рЕки]ка","л[е~и~лЕщ]щи","л[и~е~лИца]цо","с[а~о~сАд]ды","в[о~а~вОлны]лна","хв[о~а~хвОст]сты",
+"р[о~а~рОг]га","вр[а~о~врАч]чи","к[о~а~кОт]ты","гл[а~о~глАз]зной","п[я~е~и~пЯть]так","б[е~и~я~бЕды]да","дл[и~е~я~длИнный]на","м[я~е~и~мЯсо]сной","л[и~е~лИст]ства",
+"т[е~и~тЁмный]мнота","н[о~а~нОги]га","с[е~и~сЁстры]стра","кр[и~е~крИк]чать","тр[о~а~трОпы]па","стр[и~е~стрИж]жи","пл[е~и~я~плЕчи]чо","сп[и~е~спИны]на","бр[е~и~брЁвна]вно","к[о~а~кОт]тёнок",
+"л[е~и~я~лЕс]сок","зв[е~и~я~звЕрь]рёк","ст[о~а~стОл]ловая","р[о~а~рОг]гатый","д[о~а~дОждь]ждливый","цв[е~и~я~цвЕт]тёт","скр[и~е~я~скрИп]пит","к[о~а~кОзы]за","[о~а~Овцы]вца","гл[а~о~глАз]за",
+"ч[а~я~чАс]сы","д[о~а~дОждь]жди","хл[е~и~хлЕб]ба","ст[е~и~стЕны]на","бл[и~е~блИн]ны","острая п[и~е~пИлка]ла","гр[и~е~грИб]бы","с[о~а~сОсны]сна","гн[е~и~гнЁзда]здо","в[е~и~вЕрх]рхушка","ч[е~и~чЕрвь]рвивый",
+"кр[и~е~я~крИво]вой","в[и~е~вИзг]зжит","зв[о~а~звОн]нит","л[и~е~лИния]нейка","в[е~и~я~вЕлит]лел","б[е~и~бЕг]жит","г[о~а~гОры]ра","ск[а~о~скАлы]ла","з[е~и~зЁрна]рно","вр[е~и~врЕд]дитель",
+"л[е~и~лЕпит]пил","пл[я~е~и~плЯска]сал","др[о~а~дрОжь]жал","ст[о~а~стОн]нал","н[о~а~нОчь]чной","т[е~и~тЁплый]пло","с[е~и~сЁстры]стра","н[о~а~нОры]ра","тр[а~о~трАвы]ва","к[о~а~кОнь]нюшня",
+"д[а~о~дАль]лекий","зап[я~е~и~пЯтна]тнать","л[е~и~лЁт]тать","гл[я~е~и~взглЯд]деть","м[о~а~мОре]рской","стр[а~о~стрАны]на","св[и~е~я~свИст]стулька","ж[а~о~я~жАль]леть","ст[а~о~стАль]льной","п[я~е~и~пЯть]так",
+"п[я~е~и~пЯтна]тно","пол[е~и~полЁт]тел","пт[е~и~я~птЕнчик]нец","к[о~а~кОврик]вёр","лош[о~а~я~лОшадь]дь","зв[е~и~звЁзды]зда","к[о~а~кОрм]рмил","к[о~а~кОт]тёнка","в[а~о~вАрит]рили","в[а~о~вАрит]ренье",
+"з[и~е~зИмы]ма","ч[и~е~чИсто]стота","к[о~а~кОрм]рмил","г[о~а~гОлубь]лубей","цв[е~и~цвЕт]тной","вр[е~и~врЕд]дители","д[е~и~дЕрево]ревьев","тр[е~и~трЕск]скучий","бр[о~а~брОсить]сок","д[о~а~дОчь]чурка",
+"з[и~е~я~зИмы]мовка","зм[е~и~я~змЕй]я","кр[о~а~крОвь]винка","ст[о~а~стОл]ляр","дв[о~а~двОр]рняжка","с[а~о~сАд]довник","х[о~а~хОдит]дить","х[и~е~хИтрый]трец","уч[е~и~учЁба]ник","учит[е~и~учИть]ль",
+"х[о~а~ЗАПОМНИТЬ]рошо","хор[о~а~хорОший]шо","кр[а~о~крАсота]сивый","р[е~и~рЕки]ка","оз[е~и~озЁра]ро","п[о~а~пОле]ля","х[о~а~хОлм]лмы","р[е~и~рЕки]чной","см[о~а~смОтрит]трел",
+"ст[о~а~стОроны]рона","стор[о~а~сторОнка]на","г[о~а~гОлос]лоса","гол[о~а~отголОсок]са","з[о~а~зОлото]лотой","зол[о~а~позолОта]той","к[о~а~кОрень]решок","кор[е~и~корЕнья]шок","г[о~а~гОловы]лова","гол[о~а~голОвка]ва",
+"б[о~а~бОроды]рода","бор[о~а~борОдка]да","кр[и~е~я~крИк]чал","др[о~а~дрОжь]жал","тр[е~и~я~трЕск]щал","п[и~е~я~пИск]щал","ст[а~о~стАрый]рик","з[е~и~зЕлень]ленела","сосновые д[е~и~дЕрево]ревья",
+"зел[е~и~зелЁный]нела","б[е~и~бЕг]жал","б[о~а~бОй]ец","сн[е~и~я~снЕг]говик","т[я~е~и~тЯга]гач","х[о~а~хОлм]лмы","ч[и~е~чИж]жи","др[о~а~дрОзд]зды","кл[е~и~клЁст]сты","н[о~а~нОж]жи",
+"эт[а~о~этАж]жи","стр[е~и~стрЕлы]ла","п[е~и~пЕрья]ро","пр[я~е~и~прЯмо]мой","т[я~е~и~тЯжесть]желый","гл[о~а~глОтка]тать","кл[е~и~я~клЁв]вать","кр[а~о~крАй]я","р[я~е~и~рЯд]ды","ств[о~а~ствОл]лы",
+"к[о~а~кОт]ты","в[о~а~вОрон]рона","д[о~а~дОждь]жди","св[и~е~свИст]сток","л[и~е~лИст]сты","к[о~а~кОльца]льцо","м[е~и~мЕх]ха","пл[е~и~плЕчи]чо","т[е~и~ЗАПОМНИТЬ]традь","уч[е~и~учЁба]ник",
+"с[о~а~сОль]лонка","р[а~о~рАд]ды подарку","острая п[и~е~пИлы]ла","вкусная сл[и~е~слИвы]ва","важные сл[о~а~слОво]ва","гр[и~е~грИб]бной суп","гр[е~и~грЕбля]бной канал","круглые м[я~е~и~мЯч]чи",
+"хорошо в л[е~и~лЕс]су","п[о~а~пОй]ют чижи","поют ч[и~е~чИж]жи","г[о~а~гОсть]стил у друга","т[е~и~тЕнь]нистый парк","под з[е~и~я~зЕмли]млёй","в к[о~а~кОрм]рмушке","в с[о~а~сОль]лонку",
+"из к[о~а~кОнь]нюшни","на л[е~и~лЕс]сной поляне","на лесной п[о~а~пОле]ляне","ж[и~е~жИть]вёт лесник","живёт л[е~и~лЕс]сник","вд[а~о~дАль]ли виднелись","вдали в[и~е~вИд]днелись","в[е~и~вЕрх]рхушки тополей",
+"верхушки т[о~а~тОполь]полей","х[о~а~хОлод]лодною порою","во дв[о~а~двОр]ре","кошка [и~е~Игры]грала","на ст[о~а~стОл]ле","ст[о~а~стОй]яла банка","банка с в[а~о~вАрит]реньем","пришла з[и~е~зИмы]ма",
+"тр[е~и~трЕск]щат морозы","трещат м[о~а~ЗАПОМНИТЬ]розы","белым к[о~а~кОврик]вром","ст[о~а~стОрож]рожил дом","стор[о~а~сторОжка]жил дом","св[и~е~свИст]тит иволга","лесные тр[о~а~трОпы]пинки","болото зат[я~е~и~тЯнет]нуло ряской",
+"м[о~а~мОре]рская волна","морская в[о~а~вОлны]лна","з[е~и~зЕлень]лёная трава","зелёная тр[а~о~трАвы]ва","в[о~а~вОздух]здушные шары","воздушные ш[а~о~шАр]ры","ст[а~о~стАль]льная линейка","стальная л[и~е~лИния]нейка"
+];
+}else if(z=="chlen_predl1"){
+mas_base=[
+"Зайчик1грызет2капусту0","Пришла2поздняя0осень0","Я1ночевал2на0озере0","В0лесу0звери1готовятся2к0зиме0","Какие0красивые0птицы1","Аня1и0Марина1рвут2ромашки0и0фиалки0","Медленно0гасла2заря1",
+"Ветер1сушит2грибы0","Начались2первые0заморозки1","Саша1решил2стать2врачом0","Они1плавают2в0пруду0","В0воде0отражались2первые0звёзды1","Случай1на0озере0","Миша1и0Глеб1бегают2на0полянке0",
+"В0середине0дрожит2росинка1","Корова1съела2траву0","Умолкнули2ночные0птицы1","Дождь1перестал2шуметь2","Оно1заросло2высоким0камышом0","Осенью0охотник1вышел2к0заливу0","Одуванчик1похож2на0солнышко0",
+"Девочка1сняла2кожуру0с0апельсина0и0увидела2","Впереди0них0шла2старушка1","Пастух1пасёт2стадо0","Кружатся2жёлтые0листья1","Малыши1были2рады2гостям0и0подаркам0","Она1полетела2над0деревней0",
+"На0Жука0напали2овчарки1","На0улице0таяло2","Однажды0коза1и0козел1забрались2в0огород0","На0скале0стоял2маленький0пингвинёнок1","Бабушка1стирает2бельё0","Белеет2пушистый0шарик1","Из0трубы0вился2дымок1",
+"Каждый1хотел2стать2хозяином0Жука0","Однажды0мы1сидели2на0дереве0","На0шарике0рожица1нарисована2","Весело0смотрит2из0зеленого0мха0","Котёнок1широко0раскрыл2рот0и0жалобно0мяукал2","Маляр1красит2стену0",
+"В0Москве0жила2маленькая0девочка1","Мальчик1кинет2мячик0","Полетели2лёгкие0пушинки1","Галка1стала2кидать2в0кувшин0камушки0","Он1испугался2и0залез2на0дерево0","Скоро0глаза1у0котят0откроются2",
+"У0кошки1шесть0котят0","Птицы1спокойно0кормились2и0весело0разговаривали2","У0кошки0Мурки0родились2котята1","Собака1сторожит2дом0","Наступила2золотая0осень1","Дети1начали2собирать2грибы0",
+"Мы1купались2в0реке0","В0саду0яблоки1налились2соком0","Какое0чистое0небо1","Оля1и0Петя1рисуют2красками0и0карандашами0","Ярко0светило2солнце1","Повар1варит2суп0","Катя1и0Настя1пекут2пироги0и0печенье0",
+"Кот1решил2поймать2мышку0","Они1гуляли2по0парку0","В0траве0стрекочут2кузнечики1","Прогулка1в0лесу0","Вова1и0Сережа1играют2на0площадке0","В0воздухе0кружились2снежинки1","Зазвенели2голосистые0ручьи1",
+"Зацвели2душистые0ландыши1","Туристы1хотели2развести2костёр0","Оно1покрылось2зеленью0","Зимой0медведь1заснул2в0берлоге0","Ромашка1похожа2на0солнце0","Папа1взял2молоток0и0прибил2полку0",
+"На0горизонте0показался2пароход1","Учитель1объясняет2урок0","Журчат2весёлые0ручейки1","Самолёт1начал2снижаться0","Она1плыла2по0реке0","В0норе0лиса1вывела2детёнышей0","Тишина1в0осеннем0лесу0"
+];
+}else if(z=="phraseology"){
+mas_base=[
+[1,"Задирать нос",["Гордиться","Смотреть вверх","Чихать","Умываться","Бегать","Прыгать"]],
+[2,"Задирать нос",["Не надо задирать нос, когда получаешь хорошие оценки.","Мальчик стал задирать нос, чтобы лучше видеть доску.","Чтобы не простудиться, нужно задирать нос воротником.","Собака любит задирать нос, когда ищет след."]],
+[1,"Водить за нос",["Обманывать","Гладить","Играть","Кормить","Вести за руку","Лечить"]],
+[2,"Водить за нос",["Не надо водить меня за нос, говори правду!","Мама водила малыша за нос, чтобы он не плакал.","Доктор водил за нос пациента, чтобы проверить рефлексы.","Клоун водил за нос смешной красный шарик."]],
+[1,"Клевать носом",["Спать","Есть","Рисовать","Писать","Читать","Играть"]],
+[2,"Клевать носом",["На скучном уроке ученик начал клевать носом.","Курица любит клевать носом зёрнышки на дорожке.","Дятел стал клевать носом старое дерево.","Малыш учился клевать носом, как маленькая птичка."]],
+[1,"Остаться с носом",["Потерпеть неудачу","Найти подарок","Умыться","Понюхать цветок","Построить дом","Купить хлеб"]],
+[2,"Остаться с носом",["Хитрая лиса обманула ворону, и та осталась с носом.","После умывания мальчик вытер лицо и остался с носом.","Если не мыть руки, можно остаться с носом.","Вкусный пирог остался с носом на столе."]],
+[1,"Встретиться нос к носу",["Оказаться очень близко","Подраться","Понюхать друг друга","Поздороваться","Разминуться","Убежать"]],
+[2,"Встретиться нос к носу",["В узком коридоре мы встретились с директором нос к носу.","Две собаки решили встретиться нос к носу и обнюхать друг друга.","Чтобы лучше рассмотреть цветок, нужно встретиться с ним нос к носу.","Пчёлы любят встречаться нос к носу с красивыми цветами."]],
+[1,"Зарубить на носу",["Хорошо запомнить","Сделать запись в дневнике","Пораниться","Построгать карандаш","Нарисовать картинку","Выучить стих"]],
+[2,"Зарубить на носу",["Заруби себе на носу: без билета в поезд не пустят.","Дровосек решил зарубить на носу большое бревно.","Чтобы не забыть, мальчик решил зарубить на носу дату в календаре.","Птица любит зарубить на носу ветку для гнезда."]],
+[1,"Сквозь землю провалиться",["Исчезнуть от стыда","Упасть в яму","Копать огород","Играть в прятки","Нырнуть в реку","Спрятаться в шкаф"]],
+[2,"Сквозь землю провалиться",["От стыда за свою двойку я готов был сквозь землю провалиться.","Волшебник сделал так, что мальчик мог сквозь землю провалиться.","Если копать глубже, можно сквозь землю провалиться.","Крот умеет сквозь землю провалиться за одну минуту."]],
+[1,"Бил баклуши",["Бездельничал","Играл в футбол","Строгал дерево","Лепил куличики","Рисовал","Прыгал"]],
+[2,"Бил баклуши",["Вместо уроков Вася весь день бил баклуши.","Вася бил баклуши молотком по дереву.","Мама попросила Васю бить баклуши для супа.","В лесу мы нашли много больших баклуш."]],
+[1,"Сломя голову",["Очень быстро","Сломанной шеей","Медленно","Грустно","Тихо","Осторожно"]],
+[2,"Сломя голову",["Щенок помчался за мячом сломя голову.","Щенок спал сломя голову на мягком диване.","Щенок ел вкусную кашу сломя голову.","Щенок лаял сломя голову на соседскую кошку."]],
+[1,"Как снег на голову",["Внезапно, неожиданно","Очень холодно","Зимой","Тихо","Медленно","Красиво"]],
+[2,"Как снег на голову",["Эта новость свалилась на меня как снег на голову.","Зимой на голову падает как снег на голову.","Чтобы не замёрзнуть, надень шапку, как снег на голову.","Белый пух летел с неба, как снег на голову."]],
+[1,"Держать язык за зубами",["Молчать, не болтать лишнего","Чистить зубы","Есть конфеты","Громко кричать","Петь песни","Жевать жвачку"]],
+[2,"Держать язык за зубами",["Это большой секрет, так что держи язык за зубами.","После визита к стоматологу трудно держать язык за зубами.","Чтобы не простудиться, нужно держать язык за зубами.","Малыш учился держать язык за зубами, когда чистил их."]],
+[1,"Витать в облаках",["Мечтать, отвлекаться","Летать на самолёте","Смотреть на небо","Прыгать высоко","Запускать змея","Карабкаться на дерево"]],
+[2,"Витать в облаках",["На уроке математики Петя любил витать в облаках.","Самолёт начал витать в облаках на большой высоте.","Птицы любят витать в облаках во время миграции.","Воздушный шар стал витать в облаках над городом."]],
+[1,"Ни свет ни заря",["Рано утром","Поздно вечером","В полдень","В темноте","Ночью","Днём"]],
+[2,"Ни свет ни заря",["Мы встали ни свет ни заря, чтобы поехать на рыбалку.","Мы включили свет ни свет ни заря в комнате.","На улице было ни свет ни заря, поэтому мы зажгли фонарь.","Мы легли спать ни свет ни заря после долгой прогулки."]],
+[1,"Повесить нос",["Опечалиться","Умыться","Понюхать цветок","Посмотреть вниз","Заболеть","Устать"]],
+[2,"Повесить нос",["Не вешай нос, у тебя обязательно всё получится!","Мальчик повесил нос на вешалку в прихожей.","У клоуна был длинный нос, который он мог повесить.","Собака повесила нос, чтобы понюхать цветок на клумбе."]],
+[1,"Рукой подать",["Очень близко","Протянуть руку","Подать предмет","Помочь другу","Помахать рукой","Дотянуться"]],
+[2,"Рукой подать",["До школы от нашего дома рукой подать.","Мальчик хотел подать рукой красное яблоко.","Мама попросила подать рукой соль со стола.","Врач сказал, что сломанную руку надо подать."]],
+[1,"Делать из мухи слона",["Преувеличивать","Лепить фигурки","Ловить насекомых","Рисовать животных","Пугать других","Громко кричать"]],
+[2,"Делать из мухи слона",["Не делай из мухи слона, это всего лишь маленькая царапина.","В зоопарке дети учились делать из мухи слона из пластилина.","Мальчик хотел сделать из мухи слона, чтобы напугать кошку.","Учитель попросил сделать из мухи слона на уроке рисования."]]
+];
+}else if(z=="commas1"){
+mas_base=[
+"Волчишка вылез, осмотрелся, походил, понюхал, сел, завыл.","На поляне высыхает трава, листья, хвоя, мох.","Частые капли дождя повисали на траве, на кустах, на деревьях.",
+"Вода настигала его, сбивала с крыш, с мокрых брёвен.","С приходом зимы многие птицы покидают наши края.","В сентябре улетают кулики, кряквы, чирики.",
+"Следом за ними тянутся чайки, гуси, лебеди, журавли.","Вода пригнула книзу языки пламени.","Огонь шипел, корчился, прятался в густых клубах дыма.",
+"Сколько рек, речек, речушек, ручьев в огромной, прекрасной нашей стране.","Сколько озёр, прудов, водохранилищ.","То-то раздолье рыболовам!",
+"В реках водятся жирные плоские лещи, золотые язи.","В горных реках водятся форели.","Мы клали их в свои следы, в глубокие ямы, налитые водой.",
+"Только осенью можно оценить красоту ясеня, осины, рябины и клена.","Королевой осеннего леса становится осина.","Летом на ее ствол, листья, ветви мы не обращаем внимания.",
+"Листья осины желтые, малиновые, пурпурные.","Хорошо смотреть на осенние деревья при закате.","Каждую весну возвращаются из теплых краев на родину журавли, дикие гуси, грачи, скворцы, жаворонки.",
+"Они направляются в родные леса, рощи и сады.","Птицы летят на озера, болота.","Они летят туда, где родились, выросли.",
+"Там они построят гнезда, выведут птенцов.","Снежными коврами покрывались и деревья, и кусты, и дороги.","Филин часто и гулко ухал.",
+"Целую неделю движется караван по пескам, а поесть и напиться негде.","Журавли высоко летают, но реки не покидают.","Лес весь лучится, сверкает и светится.",
+"Мы увидели на озере окуней.","Привязали лески к кустам багульника, а сами сидели на поваленных соснах.","Куст багульника начинал рваться и шуметь.",
+"Мы лениво подымались, тащили леску и выволакивали на берег жирных окуней.","Окуни били по воде хвостами, плескались, но уйти никуда не могли.","На лесной поляне росли земляника, черника, брусника и костяника.",
+"Утром туман стелился по лугам, по реке, по низким местам.","Птицы пели, щебетали, перекликались в густых ветвях.","Солнце пробивалось сквозь тучи, сквозь листву, сквозь утреннюю дымку.",
+"Мы шли тихо, осторожно, стараясь не шуметь.","Осенью улетают на юг ласточки, стрижи, дрозды и жаворонки.","В саду поспели яблоки, груши, сливы и вишни.",
+"Ветер гудел в трубах, стучал по крыше, качал старые деревья.","Река блестела, переливалась, играла на солнце.","Тропинка вилась между кустов, между деревьев, между высоких трав.",
+"Мы катались на санках, на коньках, на лыжах.","В лесу водятся зайцы, лисы, волки и медведи.","На берегу росли ивы, осины, берёзы и ольха.",
+"Зимой снег укрыл поля, дороги, крыши и заборы.","Мороз рисовал узоры на стёклах, на ветках, на проводах.","В избушке пахло дровами, хвоей и сушёными грибами.",
+"Весной прилетели грачи, скворцы, зяблики и пеночки.","Почки на деревьях набухли, лопнули, и появились первые листочки.","Ручьи бежали по оврагам, по канавам, по дорогам.",
+"Мы слушали, как журчит вода, как поют птицы, как шумит лес.","На лугу цвели ромашки, колокольчики, васильки и лютики.","Бабочки порхали над цветами, над травой, над кустами шиповника.",
+"На крючок попались окуни, плотва, ерши и пескари.","В горах реки быстрые, холодные и прозрачные.","В них водятся форель, хариус и голец."
+];
+}else if(z=="vybor_bio_term"){
+mas_base=[
+["Как называют специалиста-зоолога, изучающего рыб?",["ихтиолог","герпетолог","гельминтолог","энтомолог","орнитолог","териолог"]],
+["Как называют специалиста-зоолога, изучающего птиц?",["орнитолог","гельминтолог","герпетолог","энтомолог","ихтиолог","териолог"]],
+["Как называют специалиста-зоолога, изучающего млекопитающих?",["териолог","орнитолог","герпетолог","ихтиолог","гельминтолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего насекомых?",["энтомолог","териолог","серпентолог","герпетолог","ихтиолог","гельминтолог"]],
+["Как называют специалиста-биолога, изучающего грибы?",["миколог","микробиолог","териолог","серпентолог","ихтиолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего паразитических червей?",["гельминтолог","микробиолог","териолог","бактериолог","герпетолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего рептилии и амфибии?",["герпетолог","гельминтолог","микробиолог","териолог","серпентолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего змей?",["серпентолог","гельминтолог","микробиолог","териолог","бактериолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего паразитических червей?",["гельминтолог","микробиолог","териолог","бактериолог","герпетолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего рептилии и амфибии?",["герпетолог","гельминтолог","микробиолог","териолог","серпентолог","энтомолог"]],
+["Как называют специалиста-зоолога, изучающего змей?",["серпентолог","гельминтолог","микробиолог","териолог","бактериолог","энтомолог"]]
+];
+}else if(z=="eng_gram1"){
+mas_base=[
+[["I am a student","я ученик"],["you are friend","ты друг"],["he is a doctor","он врач"],["she is a girl","она девочка"],["it is a cat","это кошка"],["we are children","мы дети"],["they are dogs","они собаки"]],
+[["I can swim","я умею плавать"],["you can read","ты умеешь читать"],["he can run","он умеет бегать"],["she can dance","она умеет танцевать"],["birds can fly","птицы умеют летать"],["we can play","мы умеем играть"],["they can play","они умеют играть"]],
+[["I have got a book","у меня есть книга"],["you have got a pen","у тебя есть ручка"],["he has got a dog","у него есть собака"],["she has got a sister","у неё есть сестра"],["it has got a toy","у него есть игрушка"],["we have got a house","у нас есть дом"],["they have got apples","у них есть яблоки"]],
+[["I play","я играю"],["you play","ты играешь"],["he plays","он играет"],["she plays","она играет"],["the cat plays","кот играет"],["we play","мы играем"],["they play","они играют"]]
+];
+}else if(z=="uravn1"){
+mas_base=[
+[["3·x=6","2"],["x·2=6","3"],["x:2=2","4"],["8:x=2","4"]],
+[["2+x=4","2"],["x+3=6","3"],["x-2=2","4"],["7-x=2","5"]],
+[["3·x=9","3"],["x·2=8","4"],["x:4=2","8"],["10:x=2","5"]],
+[["3+x=8","5"],["x+3=9","6"],["x-4=5","9"],["8-x=4","4"]],
+[["a·x=b","b:a"],["x·a=b","b:a"],["x:a=b","b·a","a·b"],["a:x=b","a:b"]],
+[["a+x=b","b-a"],["x+a=b","b-a"],["x-a=b","b+a","a+b"],["a-x=b","a-b"]],
+[["b·x=a","a:b"],["x·b=a","a:b"],["x:b=a","a·b","b·a"],["b:x=a","b:a"]],
+[["b+x=a","a-b"],["x+b=a","a-b"],["x-b=a","a+b","b+a"],["b-x=a","b-a"]],
+];
+}
+}
+if(action===0){t_z=[];t_v=[];t_o=[];t_e=[];t_q=0;
+if(z=="animal"){
+const used=new Set();
+while(t_z.length<10){
+const gIdx=Math.floor(Math.random()*mas_base.length);
+const aIdx=Math.floor(Math.random()*mas_base[gIdx].length);
+const key=`${gIdx}|${aIdx}`;
+if(!used.has(key)){
+used.add(key);
+const correctName=mas_base[gIdx][aIdx][0];
+const shuffledGroup=[...mas_base[gIdx]].sort(()=>Math.random()-0.5);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Животные(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~Найди ${correctName}~vopros>>`;
+for(let i=0;i<6;i++){questionText+=`<<и~${(4+Math.floor(i/2)*3)}/13~${(i%2)/2}~3/13~1/2~p0/${shuffledGroup[i][1]}~zadan('check','${i}')>>`;}
+t_z.push(questionText);t_v.push(shuffledGroup.findIndex(item=>item[0]===correctName));t_o.push(-1);t_e.push("найти "+correctName+", ");
+}}}
 
-        const taskInMenu = (state.screen === 'task' && typeof window.taskIsInMenu === 'function' && window.taskIsInMenu());
-        backBtn.style.display = (navStack.length > 0 && (state.screen !== 'task' || taskInMenu)) ? 'flex' : 'none';
+if(z=="vybor_prov_bgvk"){
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);
+const m=mas_base[idx].match(/^(.*?)\[(.*?)\](.*)$/);
+if(m){
+const parts=m[2].split('~');
+const checkWord=parts.at(-1);
+const opts=parts.slice(0,-1);
+const sorted=[...opts].sort();
+const cIdx=sorted.indexOf(opts[0]);
+const words=sorted.map(l=>m[1]+"<b>"+l+"</b>"+m[3]);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Русский(${t_z.length+1}/10)~title>><<т~1/13~0~2/13~1~Безударные гласные в корне слова~title>><<т~12/13~0~0/13~1~${checkWord}~hidden>>`;
+const n=words.length;
+const h=Math.min(3,11/n);
+for(let j=0;j<n;j++){questionText+=`<<к~${(2+j*h)}/13~0~${h}/13~1~${words[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(cIdx);t_o.push(-1);t_e.push(ppp(m[1]+"<b>"+opts[0]+"</b>"+m[3]+", "));
+}}}}
 
-        if (state.screen === 'classes') {
-            headerTitle.textContent = 'Выберите класс';
-            taskContainer.style.display = 'none';
-            app.style.display = 'flex';
-            let html = '<div class="menu-list">';
-            curriculum.forEach((cls, idx) => { html += '<button class="menu-item" onclick="openSubjects(' + idx + ')">' + cls[0] + '</button>'; });
-            html += '</div>';
-            app.innerHTML = html;
-            fitMenuText();
+if(z=="riddles"){
+const used=new Set();
+while(t_z.length<10){
+const rIdx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(rIdx)){
+used.add(rIdx);
+const correctName=mas_base[rIdx][1];
+const shuffledOptions=[...mas_base[rIdx][3]].sort(()=>Math.random()-0.5);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Загадки(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${mas_base[rIdx][0]}~vopros>><<и~20/13~0~0~0~p0/${mas_base[rIdx][2]}>>`;
+for(let i=0;i<6;i++){questionText+=`<<к~${4+Math.floor(i/2)*3}/13~${(i%2)/2}~3/13~1/2~${shuffledOptions[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(questionText);t_v.push(shuffledOptions.indexOf(correctName));t_o.push(-1);t_e.push(`${mas_base[rIdx][0]}(${correctName})<br> `);
+}}}
 
-        } else if (state.screen === 'subjects') {
-            const classData = curriculum[state.classIdx];
-            headerTitle.textContent = classData[0];
-            taskContainer.style.display = 'none';
-            app.style.display = 'flex';
-            const subjects = classData.slice(1);
-            if (subjects.length === 0) { app.innerHTML = '<div class="empty-msg">Предметы для этого класса пока не добавлены</div>'; }
-            else {
-                let html = '<div class="menu-list">';
-                subjects.forEach((subj, idx) => { html += '<button class="menu-item" onclick="openTopics(' + state.classIdx + ',' + idx + ')">' + subj[0] + '</button>'; });
-                html += '</div>';
-                app.innerHTML = html;
-                fitMenuText();
-            }
+if(z=="add"){
+const used=new Set();
+while(t_z.length<10){
+const a=Math.floor(Math.random()*5)+1;
+const b=Math.floor(Math.random()*5)+1;
+if(a===5&&b===5)continue;
+const key=`${a}|${b}`;
+if(!used.has(key)){
+used.add(key);
+const opts=[2,3,4,5,6,7,8,9];
+const c=a+b;
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Сложение(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${a} + ${b} = ?~vopros>>`;
+for(let i=0;i<8;i++){questionText+=`<<к~${(16+Math.floor(i/2)*9)}/52~${(i%2)/2}~9/52~1/2~${opts[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(questionText);t_v.push(opts.indexOf(c));t_o.push(-1);t_e.push(`${a} + ${b} = ${c}`);
+}}}
 
-        } else if (state.screen === 'topics') {
-            const classData = curriculum[state.classIdx];
-            const subjectData = classData[state.subjectIdx + 1];
-            headerTitle.textContent = subjectData[0];
-            taskContainer.style.display = 'none';
-            app.style.display = 'flex';
-            const topics = subjectData.slice(1);
-            if (topics.length === 0) { app.innerHTML = '<div class="empty-msg">Темы пока не добавлены</div>'; }
-            else {
-                let html = '<div class="menu-list">';
-                topics.forEach(topic => {
-                    const name = topic[0], file = topic[1], init = topic[2] || 'startTest';
-                    html += '<button class="menu-item" onclick="startExternalTask(\'' + file + '\',\'' + init + '\',\'' + name + '\')">' + name + '</button>';
-                });
-                html += '</div>';
-                app.innerHTML = html;
-                fitMenuText();
-            }
+if(z=="add2"){
+if(param==null){
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Сложение~title>><<т~1/13~0~2/13~1~Выберите число от 1 до 9~title>>`;
+for(let i=0;i<10;i++){
+if(i<9){t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~${i+1}~zadan(0,'${i+1}')~knopki>>`;}
+else{t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~X~zadan(0,'random')~knopki>>`;}
+}
+}else if(param==='random'){
+const used=new Set();
+while(t_z.length<10){
+const a=Math.floor(Math.random()*9)+1;const b=Math.floor(Math.random()*9)+1;
+const key=`${a}|${b}`;
+if(!used.has(key)){
+used.add(key);
+const c=a+b;
+const s=Math.floor(Math.random()*(Math.min(c,11)-Math.max(2,c-7)+1))+Math.max(2,c-7);
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Сложение(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${a} + ${b} = ?~vvod>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(opts.indexOf(c));t_o.push(-1);t_e.push(`${a} + ${b} = ${c}`);
+}
+}
+}else{
+const n=parseInt(param);
+const qs=[];
+for(let i=1;i<=9;i++){
+const a=n;
+const b=i;
+const c=a+b;
+const s=Math.floor(Math.random()*(Math.min(c,11)-Math.max(2,c-7)+1))+Math.max(2,c-7);
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+qs.push({a,b,c,opts,cIdx:opts.indexOf(c)});
+}
+qs.sort(()=>Math.random()-0.5);
+for(let i=0;i<9;i++){
+if(Math.random()<0.5){const temp=qs[i].a;qs[i].a=qs[i].b;qs[i].b=temp;}
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Сложение(${t_z.length+1}/9)~title>><<т~1/13~0~3/13~1~${qs[i].a} + ${qs[i].b} = ?~vvod>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${qs[i].opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(qs[i].cIdx);t_o.push(-1);t_e.push(`${qs[i].a} + ${qs[i].b} = ${qs[i].opts[qs[i].cIdx]}`);
+}}}
 
-        } else if (state.screen === 'task') {
-            headerTitle.textContent = state.taskName;
-            app.style.display = 'none';
-            taskContainer.style.display = 'flex';
-            gameArea.innerHTML = '<div class="empty-msg">Загрузка...</div>';
-            if (currentScript) document.head.removeChild(currentScript);
-            currentScript = document.createElement('script');
-            currentScript.src = state.taskFile;
-            currentScript.onload = () => {
-                gameArea.innerHTML = '';
-                updateOrientation();
-                if (typeof window[state.initFunc] === 'function') {
-                    window[state.initFunc](gameArea, goBack, null);
-                    setTimeout(() => {
-                        const taskInMenu = (typeof window.taskIsInMenu === 'function' && window.taskIsInMenu());
-                        backBtn.style.display = (navStack.length > 0 && taskInMenu) ? 'flex' : 'none';
-                    }, 50);
-                } else {
-                    gameArea.innerHTML = '<div class="empty-msg">Ошибка: функция ' + state.initFunc + ' не найдена.</div>';
-                }
-            };
-            currentScript.onerror = () => { gameArea.innerHTML = '<div class="empty-msg">❌ Ошибка загрузки: <b>' + state.taskFile + '</b></div>'; };
-            document.head.appendChild(currentScript);
-        }
-    }
+if(z=="sub"){
+if(param==null){
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Вычитание~title>><<т~1/13~0~2/13~1~Выберите число от 1 до 9~title>>`;
+for(let i=0;i<10;i++){
+if(i<9){t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~${i+1}~zadan(0,'${i+1}')~knopki>>`;}
+else{t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~X~zadan(0,'random')~knopki>>`;}
+}
+}else if(param==='random'){
+const used=new Set();
+while(t_z.length<10){
+const a=Math.floor(Math.random()*9)+1;
+const b=Math.floor(Math.random()*a)+1;
+const key=`${a}|${b}`;
+if(!used.has(key)){
+used.add(key);
+const c=a-b;
+const s=Math.floor(Math.random()*(Math.min(c,11)-Math.max(0,c-7)+1))+Math.max(0,c-7);
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Вычитание(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${a} - ${b} = ?~vopros>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(opts.indexOf(c));t_o.push(-1);t_e.push(`${a} - ${b} = ${c}`);
+}
+}
+}else{
+const n=parseInt(param);
+const qs=[];
+for(let i=1;i<=9;i++){
+let a=n;
+let b=i;
+if(a<b){let temp=a;a=b;b=temp;}
+const c=a-b;
+const s=Math.floor(Math.random()*(Math.min(c,11)-Math.max(0,c-7)+1))+Math.max(0,c-7);
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+qs.push({a,b,c,opts,cIdx:opts.indexOf(c)});
+}
+qs.sort(()=>Math.random()-0.5);
+for(let i=0;i<9;i++){
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Вычитание(${t_z.length+1}/9)~title>><<т~1/13~0~3/13~1~${qs[i].a} - ${qs[i].b} = ?~vopros>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${qs[i].opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(qs[i].cIdx);t_o.push(-1);t_e.push(`${qs[i].a} - ${qs[i].b} = ${qs[i].opts[qs[i].cIdx]}`);
+}}}
 
-    function launchTaskWithState(savedTaskState) {
-        const app = document.getElementById('app');
-        const taskContainer = document.getElementById('task-container');
-        const gameArea = document.getElementById('game-area');
-        const headerTitle = document.getElementById('header-title');
-        const backBtn = document.getElementById('back-btn');
+if(z=="mult"){
+if(param==null){
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение~title>><<т~1/13~0~2/13~1~Выберите число от 1 до 9~title>>`;
+for(let i=0;i<10;i++){
+if(i<9){t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~${i+1}~zadan(0,'${i+1}')~knopki>>`;}
+else{t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~X~zadan(0,'random')~knopki>>`;}
+}
+}else if(param==='random'){
+const used=new Set();
+while(t_z.length<10){
+const a=Math.floor(Math.random()*9)+1;const b=Math.floor(Math.random()*9)+1;
+const key=`${a}|${b}`;
+if(!used.has(key)){
+used.add(key);
+const c=a*b;
+const minS=Math.max(1,c-7);
+const maxS=c;
+const s=Math.floor(Math.random()*(maxS-minS+1))+minS;
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${a} × ${b} = ?~vopros>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(opts.indexOf(c));t_o.push(-1);t_e.push(`${a} × ${b} = ${c}`);
+}
+}
+}else{
+const n=parseInt(param);
+const qs=[];
+for(let i=1;i<=9;i++){
+const a=n;
+const b=i;
+const c=a*b;
+const minS=Math.max(1,c-7);
+const maxS=c;
+const s=Math.floor(Math.random()*(maxS-minS+1))+minS;
+const opts=[];for(let j=0;j<8;j++)opts.push(s+j);
+qs.push({a,b,c,opts,cIdx:opts.indexOf(c)});
+}
+qs.sort(()=>Math.random()-0.5);
+for(let i=0;i<9;i++){
+if(Math.random()<0.5){const temp=qs[i].a;qs[i].a=qs[i].b;qs[i].b=temp;}
+let questionText=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение(${t_z.length+1}/9)~title>><<т~1/13~0~3/13~1~${qs[i].a} × ${qs[i].b} = ?~vopros>>`;
+for(let j=0;j<8;j++){questionText+=`<<к~${(4+Math.floor(j/2)*2.25)/13}~${(j%2)/2}~2.25/13~1/2~${qs[i].opts[j]}~zadan('check','${j}')~knopki>>`;}
+t_z.push(questionText);t_v.push(qs[i].cIdx);t_o.push(-1);t_e.push(`${qs[i].a} × ${qs[i].b} = ${qs[i].opts[qs[i].cIdx]}`);
+}
+}
+}
+if(z=="mult2"){
+if(param==null){t_a="";
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение~title>><<т~1/13~0~2/13~1~Выберите число от 1 до 9~title>>`;
+for(let i=0;i<10;i++){
+const val=i<9?i+1:'X';
+const act=i<9?`zadan(0,'${i+1}')`:`zadan(0,'random')`;
+t+=`<<к~${3+Math.floor(i/2)*2}/13~${i%2/2}~2/13~1/2~${val}~${act}~knopki>>`;
+}
+}else if(param==='random'){
+const used=new Set();
+while(t_z.length<10){
+const a=Math.floor(Math.random()*7)+3;const b=Math.floor(Math.random()*7)+3;
+const key=`${a}|${b}`;
+if(!used.has(key)){
+used.add(key);
+const c=a*b;
+let screen=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение(${t_z.length+1}/10)~title>><<т~1/13~0~2/13~1~${a} × ${b} = [[ta]]~vvod>>`;
+screen+=clav(1)+`<<к~11/13~0~2/13~1~Ответить~zadan('check',t_a)~knopki>>`;
+t_z.push(screen);t_v.push(c);t_o.push(0);t_e.push(`${a} × ${b} = ${c}`);
+}
+}
+}else{
+const n=Number(param);
+const qs=[];
+for(let i=1;i<=9;i++){
+const isSwapped=Math.random()<0.5;
+const val1=isSwapped?n:i;
+const val2=isSwapped?i:n;
+const c=val1*val2;
+qs.push({q:`${val1} × ${val2} = [[ta]]`,a:c,e:`${val1} × ${val2} = ${c}`});
+}
+qs.sort(()=>Math.random()-0.5);
+for(let i=0;i<9;i++){
+let screen=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Умножение(${t_z.length+1}/9)~title>><<т~1/13~0~2/13~1~${qs[i].q}~vvod>>`;
+screen+=clav(1)+`<<к~11/13~0~2/13~1~Ответить~zadan('check',t_a)~knopki>>`;
+t_z.push(screen);t_v.push(qs[i].a);t_o.push("");t_e.push(qs[i].e);
+}
+}
+}
+if(z=="chlen_predl1"){
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);const words=[];const marks=[];
+let currentWord="";
+for(let i=0;i<mas_base[idx].length;i++){
+const ch=mas_base[idx][i];
+if(ch==='0'||ch==='1'||ch==='2'){if(currentWord){words.push(currentWord);marks.push(parseInt(ch));currentWord="";}}
+else{currentWord+=ch;}
+}
+if(currentWord){words.push(currentWord);marks.push(0);}
+t_v.push(marks.join('~'));t_o.push(new Array(words.length).fill(0).join('~'));
+v1="";for(let i=0;i<words.length;i++){v1+=`<span onclick="zadan('click','${i}')" [[${marks[i]}]]>${words[i]}</span> `;}
+let v2=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Русский(${t_z.length+1}/10)~title>><<т~1/13~0~1/13~1~Главные члены предложения~title>>`;
+v2+=`<<т~2/13~0~8/13~1~${v1}~vopros>><<т~10/13~0~1/13~1~1 клик — подлежащее, 2 клика — сказуемое, 3 клика — сброс~koment>><<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~knopki>>`;
+t_z.push(v2);
+v1="";
+for(let i=0;i<words.length;i++){
+if(marks[i]===1)v1+=`<span style="text-decoration:underline solid;">${words[i]}</span> `;
+else if(marks[i]===2)v1+=`<span style="text-decoration:underline double;">${words[i]}</span> `;
+else v1+=`${words[i]} `;
+}
+t_e.push(v1.slice(0,-1)+". ");
+}
+}
+t=t_z[0];t_a=t_o[0];t_o[0]=0
+}
 
-        headerTitle.textContent = state.taskName;
-        app.style.display = 'none';
-        taskContainer.style.display = 'flex';
-        gameArea.innerHTML = '<div class="empty-msg">Загрузка...</div>';
+if(_menu[1]=="phraseology"){
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);
+const type=mas_base[idx][0];
+const phrase=mas_base[idx][1];
+const options=[...mas_base[idx][2]].sort(()=>Math.random()-0.5);
+const correctIdx=options.indexOf(mas_base[idx][2][0]);
+let v1=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Русский(${t_z.length+1}/10)~title>><<т~1/13~0~1/13~1~Фразеологизмы~title>>`;
+v1+=`<<т~2/13~0~1/13~1~${type===1?"Выбери значение фразеологизма:":"Выбери предложение, где фразеологизм использован верно:"}~vopros>><<т~3/13~0~2/13~1~${phrase}~title>><<т~12/13~0~0/13~0~${mas_base[idx][2][0]}~hidden>>`;
+for(let i=0;i<options.length;i++){v1+=`<<к~${(5+i*Math.min(3,8/options.length))}/13~0~${Math.min(3,8/options.length)}/13~1~${options[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(v1);t_v.push(correctIdx);t_o.push(0);t_e.push(phrase+". ");
+}
+}
+t=t_z[0];
+}
 
-        if (currentScript) document.head.removeChild(currentScript);
-        currentScript = document.createElement('script');
-        currentScript.src = state.taskFile;
-        currentScript.onload = () => {
-            gameArea.innerHTML = '';
-            updateOrientation();
-            if (typeof window[state.initFunc] === 'function') {
-                window[state.initFunc](gameArea, goBack, savedTaskState);
-                setTimeout(() => {
-                    const taskInMenu = (typeof window.taskIsInMenu === 'function' && window.taskIsInMenu());
-                    backBtn.style.display = (navStack.length > 0 && taskInMenu) ? 'flex' : 'none';
-                }, 50);
-            } else {
-                gameArea.innerHTML = '<div class="empty-msg">Ошибка: функция ' + state.initFunc + ' не найдена.</div>';
-            }
-        };
-        currentScript.onerror = () => { gameArea.innerHTML = '<div class="empty-msg">❌ Ошибка загрузки: <b>' + state.taskFile + '</b></div>'; };
-        document.head.appendChild(currentScript);
-    }
+if(_menu[1]=="commas1"){
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);
+const w=[],m=[];
+mas_base[idx].split(/\s+/).forEach(t=>{if(t.endsWith(",")){w.push(t.slice(0,-1));m.push(1);}else{w.push(t);m.push(0);}});
+let v1="";
+for(let i=0;i<w.length;i++){
+v1+=`<span onclick="zadan('click','${i}')" style="cursor:pointer">${w[i]}[[${i}]]</span>`;
+if(i<w.length-1){v1+=" ";}
+}
+let v2="";
+for(let i=0;i<w.length;i++){v2+=w[i]+(m[i]===1?",":"");if(i<w.length-1)v2+=" ";}
+let s=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Русский(${t_z.length+1}/10)~title>><<т~1/13~0~1/13~1~Расставь запятые~title>>`;
+s+=`<<т~2/13~0~8/13~1~${v1}~vopros>><<т~10/13~0~1/13~1~Клик по слову — поставить/убрать запятую~koment>>`;
+s+=`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+t_z.push(s);t_v.push(m.slice(0,-1).join('~'));t_o.push(new Array(w.length-1).fill(0).join('~'));t_e.push(v2);
+}
+}
+t=t_z[0];t_a=t_o[0];t_o[0]=0
+}
 
-    document.addEventListener('keydown', function(e) {
-        if (e.altKey && e.key === 'Delete') {
-            e.preventDefault();
-            console.log('Alt+Delete: сброс всех сохранений');
-            localStorage.removeItem('zubrilka_state');
-            if (typeof window.taskCleanup === 'function') {
-                window.taskCleanup();
-                window.taskCleanup = null;
-            }
-            window.taskGetState = null;
-            window.taskIsInMenu = null;
-            window.taskShowResultsBeforeExit = null;
-            if (currentScript) {
-                if (currentScript.parentNode) currentScript.parentNode.removeChild(currentScript);
-                currentScript = null;
-            }
-            state = { screen: 'classes' };
-            navStack = [];
-            render();
-        }
-    });
+if(_menu[1]=="vybor_bio_term"){
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);
+const q=mas_base[idx][0];
+const opts=[...mas_base[idx][1]].sort(()=>Math.random()-0.5);
+const cIdx=opts.indexOf(mas_base[idx][1][0]);
+const h=Math.min(2.5,9/opts.length);
+let s=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Биология(${t_z.length+1}/10)~title>><<т~1/13~0~3/13~1~${q}~title>>`;
+for(let i=0;i<opts.length;i++){s+=`<<к~${(4+i*h)}/13~0~${h}/13~1~${opts[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(s);t_v.push(cIdx);t_o.push(0);t_e.push(`${q} (${mas_base[idx][1][0]}) `);
+}
+}
+t=t_z[0];
+}
 
-    window.addEventListener('resize', updateOrientation);
-    window.addEventListener('orientationchange', () => setTimeout(updateOrientation, 100));
-    updateOrientation();
+if(z=="eng_word1"){
+const used=new Set();
+while(t_z.length<10){
+const gIdx=Math.floor(Math.random()*mas_base.length);
+const aIdx=Math.floor(Math.random()*mas_base[gIdx].length);
+const key=`${gIdx}|${aIdx}`;
+if(!used.has(key)){
+used.add(key);
+const word=mas_base[gIdx][aIdx];
+const isRuToEn=t_z.length<5;
+const qWord=isRuToEn?word[0]:word[1];
+const correctAns=isRuToEn?word[1]:word[0];
+const qText=isRuToEn?`<b>${word[0]}</b>`:`<b>${word[1]}</b>`;
+const others=mas_base[gIdx].filter(w=>w[0]!==word[0]).sort(()=>Math.random()-0.5).slice(0,5);
+const opts=[correctAns,...others.map(w=>isRuToEn?w[1]:w[0])].sort(()=>Math.random()-0.5);
+const cIdx=opts.indexOf(correctAns);
+let s=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Английский(${t_z.length+1}/10)~title>><<т~1/13~0~1/13~1~Переведи слово~title>><<т~2/13~0~2/13~1~${qText}~vopros>>`;
+for(let i=0;i<6;i++){s+=`<<к~${(4+Math.floor(i/2)*3)+"/13"}~${(i%2===0)?"0":"1/2"}~3/13~1/2~${opts[i]}~zadan('check','${i}')~knopki>>`}
+t_z.push(s);t_v.push(cIdx);t_o.push(-1);t_e.push(`${word[0]}-${word[1]}, `);
+}
+}
+t=t_z[0];
+}
 
-    const restored = restoreState();
-    if (restored) {
-        navStack = restored.navStack || [];
-        state = restored.state || { screen: 'classes' };
-        if (state.screen === 'task' && restored.taskState) {
-            launchTaskWithState(restored.taskState);
-        } else {
-            render();
-        }
-    } else {
-        render();
-    }
+if(z=="eng_gram1"){t_a="";
+const used=new Set();
+while(t_z.length<10){
+const g=Math.floor(Math.random()*mas_base.length);
+const n=Math.floor(Math.random()*mas_base[g].length);
+const key=`${g}|${n}`;
+if(used.has(key))continue;
+used.add(key);
+const w=mas_base[g][n];
+const allWords=[...new Set(mas_base[g].map(x=>x[1].split(/\s+/)).flat())].sort();
+const answerWords=w[1].split(/\s+/);
+const correctIdx=answerWords.map(word=>allWords.indexOf(word)).join('~');
+let wordsHtml="";
+for(let i=0;i<allWords.length;i++){
+wordsHtml+=`<span onclick="zadan('click','${i}')" style="cursor:pointer">${allWords[i]}</span>`;
+if(i<allWords.length-1)wordsHtml+=" ";
+}
+let s=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Английский язык(${t_z.length+1}/10)~title>><<т~1/13~0~2/13~1~Переведи: ${w[0]}~vopros>>`;
+s+=`<<т~3/13~0~2/13~1~[[1]]~vvod>><<т~5/13~0~7/13~1~${wordsHtml}~vopros>><<к~12/13~0~1/13~1~Проверить~zadan('check',t_a)~menu>>`;
+t_z.push(s);t_v.push(correctIdx);t_o.push("");t_e.push(`${w[0]} — ${w[1]}, `);
+}
+t=t_z[0];
+}
+
+if(z=="uravn1"){
+for(let g=0;g<8;g++){
+const qIdx=Math.floor(Math.random()*mas_base[g].length);
+const q=mas_base[g][qIdx];
+const correctAnswer=q[1];
+const isNumeric=/^\d+$/.test(correctAnswer);
+const allAnswers=q.slice(1);
+const answerToSave=allAnswers.length===1?allAnswers[0]:allAnswers;
+let screen=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Уравнения(${g+1}/8)~title>><<т~1/13~0~2/13~1~${q[0]}~vopros>><<т~3/13~0~2/13~1~x = [[ta]]~vvod>>`;
+if(isNumeric){screen+=clav(2)}else{screen+=clav(3)}
+screen+=`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+t_z.push(screen);t_v.push(answerToSave);t_o.push("");t_e.push(`${q[0]} → x = ${correctAnswer}`);
+}}
+
+t=t_z[0];t_a=t_o[0];t_o[0]=0
+
+console.log("t_z="+t_z)
+console.log("t_v="+t_v)
+console.log("t_o="+t_o)
+console.log("t_e="+t_e)
+
+if(t_z.length>0){zadan('render');return;}
+}
+
+tip_otv=["vybor_prov_bgvk","riddles"].includes(z)?2:1;
+tip_fin=["add","add2","sub","mult","mult2"].includes(z)?2:1;
+
+if(action==='render'){t=t_z[t_q];}
+
+if(action==='click'){
+console.log("click t_a="+t_a)
+const idx=parseInt(param);
+const m=t_a.split('~');
+if(z=="chlen_predl1"){m[idx]=(Number(m[idx])+1)%3}
+else if(z=="commas1"){m[idx]=1-Number(m[idx])}
+else if(z=="eng_gram1"){if(idx>=0){if(t_a==""){m[0]=idx}else{m.push(idx)};}else{m.splice(Math.abs(idx)-1,1)}}
+t_a=m.join('~');t=t_z[t_q];
+console.log("2 click t_a="+t_a)
+}
+
+if(action==='check'){
+console.log("check param="+param+typeof param+"  t_v[t_q]="+t_v[t_q]+" "+typeof t_v[t_q])
+if(tip_otv==1){t_o[t_q]=t_o[t_q]+1}else if(tip_otv==2){t_o[t_q]=param}
+let isCorrect=false;
+if(Array.isArray(t_v[t_q])){
+isCorrect=t_v[t_q].includes(param);console.log("ar")
+}else{
+isCorrect=(param==t_v[t_q]);console.log("st")
+}
+if(isCorrect){blink(1);setTimeout(()=>{if(t_q>=t_z.length){zadan('finish');return;}else{zadan('next')};},750);return;}
+else{blink(2);if(tip_otv==2){zadan('razbor')}else{zadan('render')}return;}
+}
+
+if(action==='check1'){
+console.log("check param="+param+typeof param+"  t_v[t_q]="+t_v[t_q]+typeof param)
+if(tip_otv==1){t_o[t_q]=t_o[t_q]+1}else if(tip_otv==2){t_o[t_q]=param}
+if(param==t_v[t_q]){blink(1);setTimeout(()=>{if(t_q>=t_z.length){zadan('finish');return;}else{zadan('next')};},750);return;}
+else{blink(2);if(tip_otv==2){zadan('razbor')}else{zadan('render')}return;}
+}
+
+if(action==='razbor'){
+if(z=="vybor_prov_bgvk"){
+const cwMatch=t_z[t_q].match(/<<т~12\/13~0~0\/13~1~([^~]+)~hidden>>/);
+const cw=cwMatch?cwMatch[1]:"ЗАПОМНИТЬ";
+const buttonRegex=/<<к~(?:[^~]*~){4}([^~]*)~zadan\('check','(\d+)'\)~knopki>/g;
+let match;wrongText="";correctText="";
+while((match=buttonRegex.exec(t_z[t_q]))!==null){if(match[2]===t_o[t_q]){wrongText=match[1]}if(parseInt(match[2])===t_v[t_q]){correctText=match[1]}}
+const wrong=wrongText.split(" ").map(word=>`<nobr>${word}</nobr>`).join(" ");
+const correct=correctText.split(" ").map(word=>`<nobr>${word}</nobr>`).join(" ");
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Русский~title>><<т~1/13~0~2/13~1~Безударные гласные в корне слова~title>>`+
+`<<т~3/13~0~3/13~1~Неверно : ${wrong}~otvet~zadan('next')>><<т~6/13~0~3/13~1~Правильно : ${correct}~otvet~zadan('next')>>`+
+(cw==="ЗАПОМНИТЬ"?`<<т~9/13~0~3/13~1~Это словарное слово, его нужно запомнить~otvet~zadan('next')>>`:`<<т~9/13~0~3/13~1~Проверка : ${cw}~otvet~zadan('next')>>`)+
+`<<к~12/13~0~1/13~1~Продолжить~zadan('next')~knopki>>`;
+}
+if(z=="riddles"){
+const options=[];
+const optionRegex=/<<к~[^~]*~[^~]*~[^~]*~[^~]*~([^~]+)~zadan\('check','\d+'\)/g;
+let match;
+while((match=optionRegex.exec(t_z[t_q]))!==null){options.push(match[1])}
+const correctAnswer=options[t_v[t_q]];
+const imgMatch=t_z[t_q].match(/<<и~20\/13~0~0~0~(p0\/[^~]+)>>/);
+const imgPath=imgMatch?imgMatch[1]:'';
+t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>><<т~0~1/6~1/13~5/6~Загадки~title>><<т~1/13~0~2/13~1~Правильный ответ: ${correctAnswer}~title>><<и~3/13~0~8/13~1~${imgPath}~zadan('next')>><<к~11/13~0~2/13~1~Продолжить~zadan('next')~knopki>>`;
+}
+}
+
+if(action==='next'){console.log("next");
+action=null;t_q++;t_a=t_o[t_q];if(tip_otv==1){t_o[t_q]=0}
+if(t_q>=t_z.length){zadan('finish');return;}
+zadan('render');return;
+}
+
+if(action==='finish'){
+console.log("finish tip_fin="+tip_fin+" tip_otv="+tip_otv)
+let _t_m=t_m.split("|");let _menu=menu;let names=[];
+for(let i=0;i<_t_m.length;i++){let idx=parseInt(_t_m[i]);if(_menu[idx]&&_menu[idx][0]){names.push(_menu[idx][0]);_menu=_menu[idx];}}
+let parentName=names.length>1?names[names.length-2]:names[0];
+let currentName=names[names.length-1];
+let errors=[];
+for(let i=0;i<t_z.length;i++){
+if(tip_otv==1)console.log("tip_otv==1   t_o[i]="+t_o[i])
+if(tip_otv==2)console.log("tip_otv==2   t_o[i]="+t_o[i]+" t_v[i]="+t_v[i])
+if(((tip_otv==1)&&(t_o[i]>1))||((tip_otv==2)&&(t_o[i]!==t_v[i]))){
+if(tip_fin==2){errors.push("<nobr>"+t_e[i].split(" ").join("")+",&nbsp;</nobr>")}
+else{errors.push(t_e[i])}
+}
+}
+let errorText=errors.length===0?"Всё правильно!":"Ошибки: "+errors.join("");
+t=`<<т~0~0~1/13~1~${parentName}~title>><<т~1/13~0~1/13~1~${currentName}~title>><<т~2/13~0~1/13~1~Выполнено ${t_z.length} заданий!~vopros>><<т~3/13~0~8/13~1~${errorText}~vopros~zadan(0)>><<к~11/13~0~2/13~1~← В меню~t_m='${vt_m}';zadan(0)~menu>>`;
+}
+
+}
+}
+console.log("РЕНДЕРИМ t="+t);
+if(t.indexOf("[[ta]]")>-1)t=t.split("[[ta]]").join(t_a);
+if(action!=='finish'){
+if(z=="chlen_predl1"){
+const states=t_a.split('~');
+let wordIndex=0;
+t=t.replace(/\[\[\d+\]\]/g,function(match){
+const state=states[wordIndex]||"0";
+wordIndex++;
+if(state==="1"){return'style="cursor: pointer;text-decoration: underline solid; text-underline-offset: 4px;"'}
+else if(state==="2"){return'style="cursor: pointer;text-decoration: underline double; text-underline-offset: 4px;"'}
+else{return"style='cursor: pointer;'"}
+});
+}
+if(z=="commas1"){
+const states=t_a.split('~');
+t=t.replace(/\[\[(\d+)\]\]/g,function(match,index){const state=states[index]||"0";if(state==="1"){return","}else{return""}});
+}
+if(z=="eng_gram1"){
+if(t_a===""){t=t.replace("[[1]]","");}
+else{
+console.log("РЕНДЕРИМ eng_gram1 t_a="+t_a);
+const allWordsMatch=t_z[t_q].match(/<<т~5\/13~0~7\/13~1~(.+?)~vopros>>/);
+const wordsHtml=allWordsMatch?allWordsMatch[1]:"";
+console.log("РЕНДЕРИМ eng_gram1 wordsHtml="+wordsHtml);
+const allWords=[];
+const spanRegex=/<span[^>]*>([^<]+)<\/span>/g;
+let m;
+while((m=spanRegex.exec(wordsHtml))!==null)allWords.push(m[1]);
+console.log("РЕНДЕРИМ eng_gram1 allWords="+allWords);
+const idxArr=t_a.split('~');
+let answerHtml="";
+for(let i=0;i<idxArr.length;i++){
+const word=allWords[parseInt(idxArr[i])]||"";
+answerHtml+=`<span onclick="zadan('click','${-(i+1)}')" style="cursor:pointer">${word}</span>`;
+if(i<idxArr.length-1)answerHtml+=" ";
+}
+console.log("РЕНДЕРИМ eng_gram1 answerHtml="+answerHtml);
+t=t.replace("[[1]]",answerHtml);
+console.log("РЕНДЕРИМ eng_gram1 t="+t);
+}
+}
+}
+const pole=document.getElementById('pole');pole.innerHTML='';pole.scrollTop=0;elements=[];
+const regex=/<<(и|к|т|м)~(.*?)>>/g;
+let match,maxBottom=0;
+while((match=regex.exec(t))!==null){
+const p=match[2].split('~');
+const el=createElement(match[1],p[4]||'',p[5]||'',p[6]||'',p[7]||'');
+elements.push({el,topF:parseFrac(p[0]),leftF:parseFrac(p[1]),heightF:parseFrac(p[2]),widthF:parseFrac(p[3])});
+pole.appendChild(el);
+maxBottom=Math.max(maxBottom,elements[elements.length-1].topF+elements[elements.length-1].heightF);
+}
+applySizes(maxBottom);
+saveState();
+}
+
+function ppp(str){return str.split(" ").map(word=>`<nobr>${word}</nobr>`).join("&nbsp;");}
+
+function blink(color){console.log("blink color="+color)
+ const ov=document.createElement('div');
+ ov.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;transition:opacity 700ms;opacity:0.7;display:flex;align-items:center;justify-content:center;";
+ ov.style.backgroundColor=(color===1)?'#86efac':'#fca5a5';
+ const txt=document.createElement('div');
+ if(color===1){txt.textContent='ДА';txt.style.cssText="font-size:25vh;font-weight:bold;color:green;opacity:0.7;text-shadow:0 0 20px rgba(0,0,0,0.3);max-height:25vh;";}
+ else{txt.textContent='НЕТ';txt.style.cssText="font-size:25vh;font-weight:bold;color:red;opacity:0.7;text-shadow:0 0 20px rgba(0,0,0,0.3);max-height:25vh;";}
+ ov.appendChild(txt);
+ document.body.appendChild(ov);
+ setTimeout(()=>{ov.style.opacity='0';setTimeout(()=>{ov.remove();},750);},50);
+}
+
+function clav(tip_clav){
+ if(tip_clav==1){return`<<к~3/13~0~2/13~1/3~7~t_a=t_a+'7';zadan('render')~knopki>><<к~3/13~1/3~2/13~1/3~8~t_a=t_a+'8';zadan('render')~knopki>><<к~3/13~2/3~2/13~1/3~9~t_a=t_a+'9';zadan('render')~knopki>><<к~5/13~0~2/13~1/3~4~t_a=t_a+'4';zadan('render')~knopki>><<к~5/13~1/3~2/13~1/3~5~t_a=t_a+'5';zadan('render')~knopki>><<к~5/13~2/3~2/13~1/3~6~t_a=t_a+'6';zadan('render')~knopki>><<к~7/13~0~2/13~1/3~1~t_a=t_a+'1';zadan('render')~knopki>><<к~7/13~1/3~2/13~1/3~2~t_a=t_a+'2';zadan('render')~knopki>><<к~7/13~2/3~2/13~1/3~3~t_a=t_a+'3';zadan('render')~knopki>><<к~9/13~0~2/13~1/3~C~t_a='';zadan('render')~knopki>><<к~9/13~1/3~2/13~1/3~0~t_a=t_a+'0';zadan('render')~knopki>><<к~9/13~2/3~2/13~1/3~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`}
+ if(tip_clav==2){return`<<к~5/13~0~2/13~1/4~1~t_a=t_a+'1';zadan('render')~knopki>><<к~5/13~1/4~2/13~1/4~2~t_a=t_a+'2';zadan('render')~knopki>><<к~5/13~2/4~2/13~1/4~3~t_a=t_a+'3';zadan('render')~knopki>><<к~5/13~3/4~2/13~1/4~4~t_a=t_a+'4';zadan('render')~knopki>> <<к~7/13~0~2/13~1/4~5~t_a=t_a+'5';zadan('render')~knopki>><<к~7/13~1/4~2/13~1/4~6~t_a=t_a+'6';zadan('render')~knopki>><<к~7/13~2/4~2/13~1/4~7~t_a=t_a+'7';zadan('render')~knopki>><<к~7/13~3/4~2/13~1/4~8~t_a=t_a+'8';zadan('render')~knopki>> <<к~9/13~0~2/13~1/4~C~t_a='';zadan('render')~knopki>><<к~9/13~1/4~2/13~1/4~9~t_a=t_a+'9';zadan('render')~knopki>><<к~9/13~2/4~2/13~1/4~0~t_a=t_a+'0';zadan('render')~knopki>><<к~9/13~3/4~2/13~1/4~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`}
+ if(tip_clav==3){return`
+ <<к~5/13~0~2/13~1/4~a~t_a=t_a+'a';zadan('render')~knopki>><<к~5/13~1/4~2/13~1/4~b~t_a=t_a+'b';zadan('render')~knopki>><<к~5/13~2/4~2/13~1/4~c~t_a=t_a+'c';zadan('render')~knopki>><<к~5/13~3/4~2/13~1/4~d~t_a=t_a+'d';zadan('render')~knopki>>
+ <<к~7/13~0~2/13~1/4~·~t_a=t_a+'·';zadan('render')~knopki>><<к~7/13~1/4~2/13~1/4~:~t_a=t_a+':';zadan('render')~knopki>><<к~7/13~2/4~2/13~1/4~+~t_a=t_a+'+';zadan('render')~knopki>><<к~7/13~3/4~2/13~1/4~-~t_a=t_a+'-';zadan('render')~knopki>>
+ <<к~9/13~0~2/13~1/4~C~t_a='';zadan('render')~knopki>><<к~9/13~1/4~2/13~1/4~(~t_a=t_a+'(';zadan('render')~knopki>><<к~9/13~2/4~2/13~1/4~)~t_a=t_a+')';zadan('render')~knopki>><<к~9/13~3/4~2/13~1/4~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`}
+}
+
+document.addEventListener('keydown',(e)=>{if(e.altKey&&e.key==='Delete'){e.preventDefault();localStorage.removeItem('zubrozhka_save');t_m=null;zadan(0);return;}});
+window.addEventListener('load',()=>{loadState();zadan(action,param);});
+window.addEventListener('resize',()=>{applySizes();});
 </script>
 </body>
 </html>
