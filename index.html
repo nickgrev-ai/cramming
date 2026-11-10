@@ -74,7 +74,8 @@ const menu=[
 ["5 класс",
  ["Математика",["Дроби","drobi"]]],
 ["6 класс"],
-["7 класс"],
+["7 класс",
+ ["Математика",["Графики функций","graf_funk"]]],
 ["8 класс",
  ["Русский язык",["Тип подчинительной связи","tip_podch_svaz"]],
  ["Биология",["Термины","vybor_bio_term"]],
@@ -82,7 +83,7 @@ const menu=[
  ],
 ["9 класс"],
 ["10 класс",
- ["Математика",["Геометрия основы","geom"]]],
+ ["Математика",["Планиметрия. Утверждения.","utver1"],["Планиметрия. Задачи.","geom"],["Вектора","vector"],["Стереометрия. Формулы.","vybor_ster"]]],
 ["11 класс"]
 ];
 
@@ -612,6 +613,21 @@ mas_base=[
  ["Вычисли общее сопротивление двух параллельно подключённых сопротивлений. R1=16&nbsp;Ом, R2=16&nbsp;Ом.",,"8"],["Вычисли общее сопротивление двух последовательно подключённых сопротивлений. R1=16&nbsp;Ом, R2=16&nbsp;Ом.",,"32"]],
 [["Найди силу тока в цепи. U=12&nbsp;В, R=4&nbsp;Ом.",,"3"],["Найди силу тока в цепи. U=24&nbsp;В, R=6&nbsp;Ом.",,"4"],["Найди напряжение в цепи. I=2&nbsp;А, R=5&nbsp;Ом.",,"10"],["Найди напряжение в цепи. I=3&nbsp;А, R=4&nbsp;Ом.",,"12"],["Найди сопротивление цепи. U=12&nbsp;В, I=3&nbsp;А.",,"4"],["Найди сопротивление цепи. U=24&nbsp;В, I=6&nbsp;А.",,"4"]],
 ];
+
+
+}else if(z=="graf_funk"){
+mas_base=[
+["ma1-1.png","y=x"],["ma1-2.png","y=x²"],["ma1-3.png","y=x³"],["ma1-4.png","y=<f>1/x</f>"],["ma1-5.png","y=-<f>1/x</f>"],["ma1-6.png","y=<k>x</k>"],["ma1-7.png","y=x-2"],
+["ma1-8.png","y=x+2"],["ma1-9.png","y=2x"],["ma1-10.png","y=<f>x/2</f>"],["ma1-11.png","y=2-x"],["ma1-12.png","y=-x"],["ma1-13.png","y=-x²"],["ma1-14.png","y=-x³"],
+["ma1-15.png","y=2x+2"],["ma1-16.png","y=2x-2"],["ma1-17.png","y=2"],["ma1-18.png","x=2"]
+];
+
+}else if(z=="utver1"){
+mas_base=[
+["Сумма углов треугольника равна 180°","В прямоугольном треугольнике сумма острых углов равна 90°","Теорема Пифагора: в прямоугольном треугольнике квадрат гипотенузы равен сумме квадратов катетов","Косинус — это отношение прилежащего катета к гипотенузе","Синус — это отношение противолежащего катета к гипотенузе","Площадь треугольника равна половине произведения стороны на высоту, проведённую к этой стороне","В равнобедренном треугольнике углы при основании равны","Биссектриса треугольника делит угол пополам","Медиана треугольника делит сторону пополам","Медиана прямоугольного треугольника, проведённая к гипотенузе, равна половине гипотенузы","Высота треугольника — это перпендикуляр, опущенный из вершины на противоположную сторону","Средняя линия треугольника параллельна одной из его сторон и равна половине этой стороны","Средняя линия треугольника отсекает от него подобный треугольник с коэффициентом подобия 1/2","Площади подобных треугольников относятся как квадрат коэффициента подобия","Вписанный угол равен половине центрального угла, опирающегося на ту же дугу","Вписанный угол, опирающийся на диаметр, равен 90°","Если сторона треугольника проходит через центр описанной окружности, то этот треугольник прямоугольный","Радиус описанной окружности прямоугольного треугольника равен половине гипотенузы","По теореме синусов: сторона треугольника равна 2R·sin противолежащего угла","Касательная к окружности перпендикулярна радиусу, проведённому в точку касания","Сумма противоположных углов вписанного четырёхугольника равна 180°","В описанном четырёхугольнике суммы противоположных сторон равны","При пересечении двух параллельных прямых секущей накрест лежащие углы равны","При пересечении двух параллельных прямых секущей соответственные углы равны","При пересечении двух параллельных прямых секущей сумма односторонних углов равна 180°","Вертикальные углы равны","Сумма смежных углов равна 180°"],
+["Сумма углов треугольника равна 360°","В прямоугольном треугольнике сумма острых углов равна 180°","Теорема Пифагора: квадрат гипотенузы равен разности квадратов катетов","Косинус — это отношение противолежащего катета к гипотенузе","Синус — это отношение прилежащего катета к гипотенузе","Площадь треугольника равна произведению стороны на высоту, проведённую к этой стороне","В равнобедренном треугольнике все углы равны","Биссектриса треугольника делит сторону пополам","Медиана треугольника делит угол пополам","Медиана прямоугольного треугольника, проведённая к гипотенузе, равна гипотенузе","Высота треугольника — это отрезок, соединяющий вершину с серединой противоположной стороны","Средняя линия треугольника равна его стороне","Средняя линия треугольника отсекает от него треугольник с коэффициентом подобия 2","Площади подобных треугольников относятся как коэффициент подобия","Вписанный угол равен центральному углу, опирающемуся на ту же дугу","Вписанный угол, опирающийся на диаметр, равен 180°","Если сторона треугольника проходит через центр описанной окружности, то этот треугольник равносторонний","Радиус описанной окружности прямоугольного треугольника равен гипотенузе","По теореме синусов: сторона треугольника равна R·sin противолежащего угла","Касательная к окружности параллельна радиусу, проведённому в точку касания","Угол между касательной и хордой равен дуге, заключённой между ними","Сумма противоположных углов вписанного четырёхугольника равна 360°","В описанном четырёхугольнике суммы противоположных сторон равны половине периметра","При пересечении двух параллельных прямых секущей накрест лежащие углы в сумме дают 180°","При пересечении двух параллельных прямых секущей соответственные углы в сумме дают 180°","При пересечении двух параллельных прямых секущей сумма односторонних углов равна 90°","Сумма вертикальных углов равна 180°","Смежные углы равны"]
+]
+
 }else if(z=="geom"){
 mas_base=[
 ["В △ ABC ∠C=90°, AB=5, AC=4, BC=3.","mg1-1.png",["Найди cos A.","0.8"],["Найди sin A.","0.6"],["Найди cos B.","0.6"],["Найди sin B.","0.8"]],
@@ -623,12 +639,36 @@ mas_base=[
 ["Дан △ ABC, ","mg1-3.png",["∠A=70°, ∠B=50°. Найди ∠BСD.","120"],["CA=CB, ∠B=50°. Найди ∠BСD.","100"],["CA=CB, ∠BCD=110°. Найди ∠B.","55"]],
 ["△ ABC вписан в окружность. Сторона AB проходит через центр окружности. Найди ∠A если ","mg1-4.png",["∠B=30°.","60"],["∠B=25°.","65"],["∠B=35°.","55"]],
 ["Найдите радиус описанной около этого треугольника окружности, если ","mg1-4.png+",["AB=8, ∠C=30°","8"],["AB=10, ∠C=30°","10"]],
+["∠ABC вписан в окружность. Точка O - центр окружности. ","mg1-11.png",["Найди ∠ABC, если ∠AOC=120°.","60"],["Найди ∠AOC, если ∠ABC=50°.","100"]],
 ["Дан △ ABC, точки M и N лежат на середине отрезков AB и BC, а ","mg1-6.png",["AC=30. Чему равен MN ?","15"],["площадь △ ABC = 30. Чему равняется площадь △ MBN","7.5"],["площадь △ ABC = 30. Чему равняется площадь трапеции AMNC","22.5"]],
 ["Сторона BA касается окружности с центром O, отрезок BO пересекает окружность в точке C. ","mg1-9.png",["Найди величину угла ABO, если дуга AС равна 35°","55"],["Найди величину угла ABO, если дуга AС равна 45°","45"]],
 ["Параллельные прямые AD и EG пересекаются прямой BF. Чему равен ∠CBD, если ","mg1-10.png",["∠ABС = 120°?","60"],["∠ABF = 65°?","65"],["∠BFG = 65°?","65"],["∠DBF = 120°?","60"]],
 ["Четырёхугольники ABCD и ABCE вписаны в окружность. Чему равен ∠ADC, если ","mg1-5.png",["∠ABC=80?","100"],["∠ABC=100?","80"],["∠AEC=80?","80"],["∠AEC=100?","100"]],
 ["В четырёхугольник ABCD вписана окружность. ","mg1-7.png",["AB=10, CD=8. Чему равен периметр ABCD ?","36"],["AB=6, CD=8. Чему равен периметр ABCD ?","28"],["Периметр ABCD равен 40, а CD=8. Чему равен AB ?","12"],["Периметр ABCD равен 30, а CD=8. Чему равен AB ?","7"]],
 ];
+
+}else if(z=="vector"){
+mas_base=[
+["Найди координаты вектора ","mg2.png",["a","2;4"],["b","4;5"],["c","5;1"],["d","6;2"]],
+["Найди длину вектора a","",["(3;4)","5"],["(6;8)","10"],["(5;12)","13"]],
+["Найдите скалярное произведение векторов a·b, если ","",["a(2;3) и b(4;-2)","2"],["a(2;3) и b(-4;2)","-2"],["a(3;2) и b(4;-2)","8"],["a(-3;2) и b(2;5)","4"]],
+["Найдите длину вектора ","",["8a+b, если a(1;1) и b(0;7)","17"],["8a+4b, если a(1;2) и b(2;-1)","20"],["14a+2b, если a(1;1) и b(1;-1)","20"],["4a+3b, если a(3;4) и b(4;-3)","25"]],
+["Найдите скалярное произведение векторов a·b, если длины векторов a и b равны ","",["3 и 5, а угол между ними равен 60°","7.5"],["3 и 7, а угол между ними равен 60°","10.5"],["3 и 6, а угол между ними равен 60°","9"]],
+];
+
+}else if(z=="vybor_ster"){
+mas_base=[
+ ["Площадь боковой поверхности призмы", ["S=P·h", "S=P·h/2", "S=2P·h", "S=P·h/3", "S=P·h²", "S=πP·h"]],
+ ["Площадь боковой поверхности цилиндра", ["S=2πRh", "S=πRh", "S=πR²h", "S=2πR²", "S=πRl", "S=4πRh"]],
+ ["Площадь боковой поверхности конуса", ["S=πRl", "S=2πRl", "S=πR²", "S=πRh", "S=2πRh", "S=4πRl"]],
+ ["Образующая конуса", ["l=<k>R²+h²</k>", "l=R+h", "l=<k>R²−h²</k>", "l=<k>2Rh</k>", "l=2R", "l=R²+h²"]],
+ ["Объём пирамиды", ["V=1/3·S·h", "V=S·h", "V=1/2·S·h", "V=1/6·S·h", "V=2/3·S·h", "V=3S·h"]],
+ ["Объём шара", ["V=4/3·πR³", "V=4/3·πR²", "V=2/3·πR³", "V=πR³", "V=4πR³", "V=1/3·πR³"]],
+ ["Объём цилиндра", ["V=πR²h", "V=2πR²h", "V=1/3·πR²h", "V=πRh", "V=πR³", "V=4/3·πR³"]],
+ ["Объём конуса", ["V=1/3·πR²h", "V=πR²h", "V=1/2·πR²h", "V=2/3·πR²h", "V=4/3·πR³", "V=πRh"]],
+ ["Объём прямоугольного параллелепипеда", ["V=abc", "V=2abc", "V=abc/2", "V=abc/3", "V=a²b", "V=πabc"]],
+ ["Объём призмы", ["V=S·h", "V=1/3·S·h", "V=1/2·S·h", "V=2S·h", "V=S·h/6", "V=3S·h"]]
+]
 }
 
 }
@@ -1025,6 +1065,19 @@ s+=`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~knopki>>`;
 t_z.push(s);t_v.push(answerToSave);t_o.push("");t_e.push(`${q[0]}=${allAnswers[0]},`.split(" ").join("")+` `);
 }}
 
+
+if(z=="graf_funk"){t_t="Графики функций";
+const used=new Set();
+while(used.size<10){used.add(Math.floor(Math.random()*mas_base.length));}
+[...used].forEach(idx=>{
+const opts=[mas_base[idx][1],...mas_base.filter((_,i)=>i!==idx).map(m=>m[1]).sort(()=>Math.random()-0.5).slice(0,5)].sort(()=>Math.random()-0.5);
+let s=`<<т~1/13~0~1/13~1~Выберите формулу функции~title>><<и~2/13~0~4/13~1~am/${mas_base[idx][0]}~>>`;
+opts.forEach((o,i)=>{s+=`<<к~${6+Math.floor(i/2)*2.32}/13~${(i%2)*0.5}~2.32/13~0.5~${o}~zadan('check','${i}')~knopki>>`;});
+t_z.push(s);t_v.push(opts.indexOf(mas_base[idx][1]));t_o.push(0);t_e.push(`${mas_base[idx][0]} → ${mas_base[idx][1]}`);
+});
+}
+
+
 if(z=="tip_podch_svaz"){t_t="Тип подчинительной связи"
  const used = new Set();
  const fixedOpts = ras_baze.split("~");
@@ -1079,6 +1132,19 @@ if(isChoice){
 t_z.push(s);t_v.push(answerToSave);t_o.push("");t_e.push(`${q[0]} → ${allAnswers[0]}, `);
 }}
 
+if(zz=="utver"){
+if(z=="utver1"){t_t="Геометрия|Выбери верные утверждения";}
+for(let q=0;q<10;q++){
+ const numTrue = 2 + Math.floor(Math.random() * 3);
+ const pickRandom = (arr, n) => {const shuffled = [...arr].sort(() => 0.5 - Math.random());return shuffled.slice(0, n)};
+ const allStmts = [...pickRandom(mas_base[0], numTrue).map(s => ({text: s, isTrue: true})),...pickRandom(mas_base[1], 6-numTrue).map(s => ({text: s, isTrue: false}))].sort(() => 0.5 - Math.random());
+ const correctAnswer = allStmts.map(s => s.isTrue ? '1' : '0').join('~');
+ let s = ``;for(let i=0; i<6; i++){s += `<<к~${(2+i*1.5)}/13~0~1.5/13~1~${allStmts[i].text}~zadan('click','${i}')~knopki>>`;}
+ s += `<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+ t_z.push(s);t_v.push(correctAnswer);t_o.push("0~0~0~0~0~0");t_e.push(allStmts.filter(s => s.isTrue).map(s => s.text).join(", ")+", ");
+}
+}
+
 if(z=="geom"){t_t="Геометрия"
 for(let i=0;i<mas_base.length;i++){
 const task=mas_base[i];
@@ -1087,13 +1153,57 @@ const rnd=Math.floor(Math.random()*qs.length);
 const q=qs[rnd][0],a=qs[rnd][1];
 let s=`<<т~1/13~0~3/13~1~${desc+q}~vopros>>`;
 if(img.endsWith('+')){
-s+=`<<т~4/13~0~4/13~2/3~<img src=gm/${img.replace(/\+$/,'')} style="max-width:100%;max-height:100%;object-fit:contain;">~vopros>><<т~4/13~2/3~4/13~1/3~${"<table border=1><tr><td>Угол<td>sin α<td>cos α<tr><td>0°<td>0<td>1<tr><td>30°<td>1/2<td>√3/2<tr><td>45°<td>√2/2<td>√2/2<tr><td>60°<td>√3/2<td>1/2<tr><td>90°<td>1<td>0</table>"}~vopros>><<т~8/13~0~1/13~1~Ответ : [[ta]]~vvod>>`+clav(8)+`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+const imgFile=img.replace(/\+$/,'');
+const tableHtml='<table border=1><tr><td>Угол<td>sin α<td>cos α<tr><td>0°<td>0<td>1<tr><td>30°<td>1/2<td>√3/2<tr><td>45°<td>√2/2<td>√2/2<tr><td>60°<td>√3/2<td>1/2<tr><td>90°<td>1<td>0</table>';
+s+=`<<и~4/13~0~4/13~2/3~gm/${imgFile}~>><<т~4/13~2/3~4/13~1/3~${tableHtml}~vopros>><<т~8/13~0~1/13~1~Ответ : [[ta]]~vvod>>`+clav(8)+`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
 }else{
-s+=`<<т~4/13~0~4/13~1~<img src=gm/${img} style="max-width:100%;max-height:100%;object-fit:contain;">~vopros>><<т~8/13~0~1/13~1~Ответ : [[ta]]~vvod>>`+clav(8)+`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+s+=`<<и~4/13~0~4/13~1~gm/${img}~>><<т~8/13~0~1/13~1~Ответ : [[ta]]~vvod>>`+clav(8)+`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
 }
 t_z.push(s);t_v.push(a);t_o.push("");t_e.push(desc+q+"→"+a+", ");
 }
 }
+
+if(z=="vector"){t_t="Векторы";
+for(let i=0;i<mas_base.length;i++){
+const task=mas_base[i];
+let desc=task[0],img=task[1],qs=task.slice(2);
+const rnd=Math.floor(Math.random()*qs.length);
+const q=qs[rnd][0],a=qs[rnd][1];
+const fullQ=desc+q;
+let s=`<<т~1/13~0~3/13~1~${fullQ}~vopros>>`;
+if(img&&img!==""){s+=`<<и~4/13~0~4/13~1~gm/${img}~>><<т~8/13~0~1/13~1~Ответ: [[ta]]~vvod>>`}
+else{v1="";for(let k=11;k<=25;k++){v1+=k+"²="+k*k+", ";}
+s+=`<<т~5/13~0~2/13~1~${v1}~koment>><<т~7/13~0~2/13~1~Ответ: [[ta]]~vvod>>`;}
+s+=clav(9)+`<<к~11/13~0~2/13~1~Проверить~zadan('check',t_a)~menu>>`;
+t_z.push(s);t_v.push(a);t_o.push("");t_e.push(fullQ+" → "+a+", ");
+}
+}
+
+if(z=="vybor_ster"){t_t="Стереометрия. Формулы"
+for(let idx=0;idx<mas_base.length;idx++){
+const q=mas_base[idx][0];
+const opts=[...mas_base[idx][1]].sort(()=>Math.random()-0.5);
+const cIdx=opts.indexOf(mas_base[idx][1][0]);
+const h=Math.min(2.5,9/opts.length);
+let s=`<<т~1/13~0~3/13~1~${q}~title>>`;
+for(let i=0;i<opts.length;i++){s+=`<<к~${(4+i*h)}/13~0~${h}/13~1~${opts[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(s);t_v.push(cIdx);t_o.push(0);t_e.push(`${q} (${mas_base[idx][1][0]}) `);
+}}
+
+if(z=="vybor_ster11"){t_t="Стереометрия. Формулы"
+const used=new Set();
+while(t_z.length<10){
+const idx=Math.floor(Math.random()*mas_base.length);
+if(!used.has(idx)){
+used.add(idx);
+const q=mas_base[idx][0];
+const opts=[...mas_base[idx][1]].sort(()=>Math.random()-0.5);
+const cIdx=opts.indexOf(mas_base[idx][1][0]);
+const h=Math.min(2.5,9/opts.length);
+let s=`<<т~1/13~0~3/13~1~${q}~title>>`;
+for(let i=0;i<opts.length;i++){s+=`<<к~${(4+i*h)}/13~0~${h}/13~1~${opts[i]}~zadan('check','${i}')~knopki>>`;}
+t_z.push(s);t_v.push(cIdx);t_o.push(0);t_e.push(`${q} (${mas_base[idx][1][0]}) `);
+}}}
 
 if (t_z.length>0) {t=t_z[0];t_a=t_o[0];t_o[0]=0}
 
@@ -1117,7 +1227,7 @@ const idx=parseInt(param);
 const m=t_a.split('~');
 if (idx<m.length) {
  if(zz=="chlen_predl"){m[idx]=(Number(m[idx])+1)%3}
- else if((zz=="commas")||(zz=="slogi")) {m[idx]=1-Number(m[idx])}
+ else if((zz=="commas")||(zz=="slogi")||(zz=="utver")) {m[idx]=1-Number(m[idx])}
  else if(zz=="eng_gram"){if(idx>=0){if(t_a==""){m[0]=idx}else{m.push(idx)};}else{m.splice(Math.abs(idx)-1,1)}}
  t_a=m.join('~');t=t_z[t_q];
 }
@@ -1189,14 +1299,13 @@ t=`<<т~0~0~1/13~1~${parentName}~title>><<т~1/13~0~1/13~1~${currentName}~title>
 }
 }
 console.log("РЕНДЕРИМ t="+t);
-console.log("РЕНДЕРИМ t_t="+t_t);
 if (t_t!="") {
  t_t_m=t_t.split("|");
  if (t_t_m.length==2) {t=`<<т~1/13~0~1/13~1~`+t_t_m[1]+`~title>>`+t}
  if (t_z.length>0) {t=`<<т~0~1/6~1/13~5/6~`+t_t_m[0]+`(${t_q+1}/${t_z.length})~title>>`+t} else {t=`<<т~0~1/6~1/13~5/6~`+t_t_m[0]+`~title>>`+t}
  t=`<<к~0~0~1/13~1/6~←~t_m='${vt_m}';zadan(0)~menu>>`+t}
 
-console.log("222");
+console.log("t_v="+t_v[t_q]);
 
 if(t.indexOf("[[ta]]")>-1)t=t.split("[[ta]]").join(t_a);
 if(action!=='finish'){
@@ -1225,7 +1334,6 @@ if(zz=="slogi"){
 }
 
 if(zz=="udar"){
-console.log("udar t_o[t_q]="+t_o[t_q],"t_a="+t_a,"param="+param)
 const cleanWord=t_e[t_q].replace(/´|, /g,''),letters=cleanWord.split(''),stressIdx=parseInt(t_a);
 let wordHtml='';
 for(let i=0;i<letters.length;i++){
@@ -1260,11 +1368,40 @@ if(z=="eng_gram1"){
  }
 }
 
+if(zz=="utver"){
+const states=t_a.split('~');
+let hoverBg='', hoverColor='';
+for(let sheet of document.styleSheets){
+ try{
+  for(let rule of sheet.cssRules){
+   if(rule.selectorText && rule.selectorText.includes('.knopki:hover')){
+    hoverBg=rule.style.backgroundColor||rule.style.background||'';
+    hoverColor=rule.style.color||'';
+    break;
+   }
+  }
+ }catch(e){}
+}
+let i=0;
+t=t.replace(/<<к~([^~]+)~([^~]+)~([^~]+)~([^~]+)~([^~]+)~([^~]+)~knopki>>/g,(m,y,x,w,h,txt,act)=>{
+ if(i<6){
+  const bg=states[i]==='1'?hoverBg:'';
+  const color=states[i]==='1'?hoverColor:'';
+  i++;
+  return `<<к~${y}~${x}~${w}~${h}~<div style="background:${bg};color:${color};width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${txt}</div>~${act}~knopki>>`;
+ }
+ return m;
+});
+}
+
 if(t.indexOf("[[td]]")>-1) {
  const v=t_a,s=(v.match(/\//g)||[]).length;
  t=t.split("[[td]]").join(s===1?`<span class="frac"><span class="frac-num">${v.split('/')[0]}</span><span class="frac-den">${v.split('/')[1]}</span></span>`:s===2?`${v.split('/')[0]}<span class="frac"><span class="frac-num">${v.split('/')[1]}</span><span class="frac-den">${v.split('/')[2]}</span></span>`:v);
 }
 }
+
+t=t.replace(/<k>(.*?)<\/k>/g, '&radic;<span style="border-top: 2px solid currentColor; padding: 0 3px; display: inline-block;">$1</span>');
+
 const pole=document.getElementById('pole');pole.innerHTML='';pole.scrollTop=0;elements=[];
 const regex=/<<(и|к|т|м)~(.*?)>>/g;
 let match,maxBottom=0;
@@ -1302,6 +1439,7 @@ function clav(tip_clav){
  if(tip_clav==6){return`<<к~5/13~0~2/13~1/5~1~t_a=t_a+'1';zadan('render')~knopki>><<к~5/13~1/5~2/13~1/5~2~t_a=t_a+'2';zadan('render')~knopki>><<к~5/13~2/5~2/13~1/5~3~t_a=t_a+'3';zadan('render')~knopki>><<к~5/13~3/5~2/13~1/5~4~t_a=t_a+'4';zadan('render')~knopki>><<к~5/13~4/5~2/13~1/5~5~t_a=t_a+'5';zadan('render')~knopki>><<к~7/13~0~2/13~1/5~6~t_a=t_a+'6';zadan('render')~knopki>><<к~7/13~1/5~2/13~1/5~7~t_a=t_a+'7';zadan('render')~knopki>><<к~7/13~2/5~2/13~1/5~8~t_a=t_a+'8';zadan('render')~knopki>><<к~7/13~3/5~2/13~1/5~9~t_a=t_a+'9';zadan('render')~knopki>><<к~7/13~4/5~2/13~1/5~0~t_a=t_a+'0';zadan('render')~knopki>><<к~9/13~0~2/13~1/5~.~t_a=t_a+'.';zadan('render')~knopki>><<к~9/13~1/5~2/13~1/5~-~t_a=t_a+"-";zadan('render')~knopki>><<к~9/13~2/5~2/13~1/5~/~t_a=t_a+'/';zadan('render')~knopki>><<к~9/13~3/5~2/13~1/5~C~t_a='';zadan('render')~knopki>><<к~9/13~4/5~2/13~1/5~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`} 
  if(tip_clav==7){return`<<к~5/13~0~2/13~1/5~a~t_a=t_a+'a';zadan('render')~knopki>><<к~5/13~1/5~2/13~1/5~b~t_a=t_a+'b';zadan('render')~knopki>><<к~5/13~2/5~2/13~1/5~c~t_a=t_a+'c';zadan('render')~knopki>><<к~5/13~3/5~2/13~1/5~d~t_a=t_a+'d';zadan('render')~knopki>><<к~5/13~4/5~2/13~1/5~1~t_a=t_a+'1';zadan('render')~knopki>><<к~7/13~0~2/13~1/5~·~t_a=t_a+'·';zadan('render')~knopki>><<к~7/13~1/5~2/13~1/5~:~t_a=t_a+':';zadan('render')~knopki>><<к~7/13~2/5~2/13~1/5~+~t_a=t_a+'+';zadan('render')~knopki>><<к~7/13~3/5~2/13~1/5~-~t_a=t_a+'-';zadan('render')~knopki>><<к~7/13~4/5~2/13~1/5~/~t_a=t_a+'/';zadan('render')~knopki>><<к~9/13~0~2/13~1/4~C~t_a='';zadan('render')~knopki>><<к~9/13~1/4~2/13~1/4~(~t_a=t_a+'(';zadan('render')~knopki>><<к~9/13~2/4~2/13~1/4~)~t_a=t_a+')';zadan('render')~knopki>><<к~9/13~3/4~2/13~1/4~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`}
  if(tip_clav==8){return`<<к~9/13~0~1/13~1/7~1~t_a=t_a+'1';zadan('render')~knopki>><<к~9/13~1/7~1/13~1/7~2~t_a=t_a+'2';zadan('render')~knopki>><<к~9/13~2/7~1/13~1/7~3~t_a=t_a+'3';zadan('render')~knopki>><<к~9/13~3/7~1/13~1/7~4~t_a=t_a+'4';zadan('render')~knopki>><<к~9/13~4/7~1/13~1/7~5~t_a=t_a+'5';zadan('render')~knopki>><<к~9/13~5/7~1/13~1/7~6~t_a=t_a+'6';zadan('render')~knopki>><<к~9/13~6/7~1/13~1/7~7~t_a=t_a+'7';zadan('render')~knopki>><<к~10/13~0~1/13~1/7~8~t_a=t_a+'8';zadan('render')~knopki>><<к~10/13~1/7~1/13~1/7~9~t_a=t_a+'9';zadan('render')~knopki>><<к~10/13~2/7~1/13~1/7~0~t_a=t_a+'0';zadan('render')~knopki>><<к~10/13~3/7~1/13~1/7~.~t_a=t_a+'.';zadan('render')~knopki>><<к~10/13~4/7~1/13~1/7~-~t_a=t_a+"-";zadan('render')~knopki>><<к~10/13~5/7~1/13~1/7~C~t_a='';zadan('render')~knopki>><<к~10/13~6/7~1/13~1/7~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`} 
+ if(tip_clav==9){return`<<к~9/13~0~1/13~1/7~1~t_a=t_a+'1';zadan('render')~knopki>><<к~9/13~1/7~1/13~1/7~2~t_a=t_a+'2';zadan('render')~knopki>><<к~9/13~2/7~1/13~1/7~3~t_a=t_a+'3';zadan('render')~knopki>><<к~9/13~3/7~1/13~1/7~4~t_a=t_a+'4';zadan('render')~knopki>><<к~9/13~4/7~1/13~1/7~5~t_a=t_a+'5';zadan('render')~knopki>><<к~9/13~5/7~1/13~1/7~6~t_a=t_a+'6';zadan('render')~knopki>><<к~9/13~6/7~1/13~1/7~7~t_a=t_a+'7';zadan('render')~knopki>><<к~10/13~0~1/13~1/7~8~t_a=t_a+'8';zadan('render')~knopki>><<к~10/13~1/7~1/13~1/7~9~t_a=t_a+'9';zadan('render')~knopki>><<к~10/13~2/7~1/13~1/7~0~t_a=t_a+'0';zadan('render')~knopki>><<к~10/13~3/7~1/13~1/7~.~t_a=t_a+'.';zadan('render')~knopki>><<к~10/13~4/7~1/13~1/7~-~t_a=t_a+"-";zadan('render')~knopki>><<к~10/13~5/7~1/13~1/7~;~t_a=t_a+';';zadan('render')~knopki>><<к~10/13~6/7~1/13~1/7~←~t_a=t_a.slice(0,-1);zadan('render')~knopki>>`} 
 }
 
 function renderFractions(el){
